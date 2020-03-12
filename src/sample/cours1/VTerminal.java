@@ -1,6 +1,9 @@
 package sample.cours1;
 
-public class VTerminal {
+import java.util.Observable;
+import java.util.Observer;
+
+public class VTerminal implements Observer {
 
     private ModelePacmanSimple modele;
 
@@ -8,7 +11,8 @@ public class VTerminal {
         this.modele = modele;
     }
 
-    public void update() {
-        System.out.println("...");
+    @Override
+    public void update(Observable o, Object arg) {
+        System.out.println("View updated");
     }
 }

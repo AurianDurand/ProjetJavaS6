@@ -1,8 +1,11 @@
 package sample.cours1;
 
-public class ModelePacmanSimple {
+import java.util.Observable;
 
-    private void run () {
+public class ModelePacmanSimple extends Observable implements Runnable {
+
+    @Override
+    public void run() {
 
     }
 
