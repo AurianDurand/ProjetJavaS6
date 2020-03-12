@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.cours1.ModelePacmanSimple;
+import sample.cours1.VTerminal;
 
 public class Main extends Application {
 
@@ -20,8 +22,9 @@ public class Main extends Application {
     public static void main(String[] args) {
         // launch(args);
 
-        // this is dev branch
-
-        // this is feature test
+        ModelePacmanSimple modele = new ModelePacmanSimple();
+        VTerminal vue = new VTerminal(modele);
+        modele.addObserver(vue);
+        new Thread(modele).start();
     }
 }
