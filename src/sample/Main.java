@@ -25,6 +25,7 @@ public class Main extends Application {
         ModelePacmanSimple modele = new ModelePacmanSimple();
         VTerminal vue = new VTerminal(modele);
         modele.addObserver(vue);
+        new Thread(modele).start();
 
     }
 

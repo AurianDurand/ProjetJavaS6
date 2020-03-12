@@ -13,6 +13,6 @@ public class VTerminal implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("View updated");
+        System.out.println("View notified");
     }
 }
