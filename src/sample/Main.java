@@ -26,5 +26,7 @@ public class Main extends Application {
         VTerminal vue = new VTerminal(modele);
         modele.addObserver(vue);
         new Thread(modele).start();
+
+        // this is a demo
     }
 }
