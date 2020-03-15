@@ -1,4 +1,4 @@
 package sample.entityManager.dynamicEntities;
 
-public class Pacman {
+public class Pacman extends DynamicEntity {
 }

@@ -1,4 +1,4 @@
 package sample.entityManager.dynamicEntities;
 
-public class Ghost {
+public class Ghost extends DynamicEntity {
 }

@@ -1,4 +1,6 @@
 package sample.entityManager.dynamicEntities;
 
-public class DynamicEntity {
+import sample.entityManager.Entity;
+
+public class DynamicEntity extends Entity {
 }

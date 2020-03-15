@@ -1,4 +1,6 @@
 package sample.entityManager.objects;
 
-public class Object {
+import sample.entityManager.Entity;
+
+public class Object extends Entity {
 }

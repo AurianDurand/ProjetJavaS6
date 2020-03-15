@@ -1,4 +1,4 @@
 package sample.map;
 
-public class Wall {
+public class Wall extends Tile {
 }

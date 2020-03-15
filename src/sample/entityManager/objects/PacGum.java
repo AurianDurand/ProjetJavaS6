@@ -1,4 +1,4 @@
 package sample.entityManager.objects;
 
-public class PacGum {
+public class PacGum extends Object {
 }
