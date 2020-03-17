@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.cours1.ModelePacmanSimple;
 import sample.cours1.VTerminal;
+import sample.map.Map;
 
 public class Main extends Application {
 
@@ -26,6 +27,9 @@ public class Main extends Application {
         VTerminal vue = new VTerminal(modele);
         modele.addObserver(vue);
         new Thread(modele).start();
+
+        // test to verify if the map works properly
+        Map map = new Map(10,10);
 
     }
 }
