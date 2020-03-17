@@ -1,5 +1,9 @@
 package sample.map;
 
+import sample.entityManager.Entity;
+
+import java.util.ArrayList;
+
 public class Map {
 
     // private ArrayList<Tile> tiles = new ArrayList<>();
@@ -7,10 +11,14 @@ public class Map {
     private int width;
     private int height;
 
-    public Map(int width, int height) {
+    private ArrayList<Entity> entities;
+
+    public Map(int width, int height, ArrayList<Entity> entitiesList) { // walls are needed in parameter 
         this.tiles = new Tile[width][height];
         this.width = width;
         this.height = height;
+
+        this.entities = entitiesList;
 
         this.generateTiles();
     }

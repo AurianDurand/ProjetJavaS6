@@ -28,9 +28,8 @@ public class Main extends Application {
         modele.addObserver(vue);
         new Thread(modele).start();
 
+        // test to verify if the map works properly
         Map map = new Map(10,10);
-
-        System.out.println(map.isTheTileAPath(1,3));
 
     }
 }
