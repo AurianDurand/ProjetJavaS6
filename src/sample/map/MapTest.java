@@ -11,8 +11,10 @@ class MapTest {
     public void testIsTheTileAPath() throws Exception {
 
         Map map = new Map(10,10);
-        Tile tile = new Path(0,0);
-        assertEquals(false, map.isTheTileAPath(0,0));
+        map.addPath(0,0);
+        map.addWall(1,1);
+        assertEquals(true, map.isTheTileAPath(0,0));
+        assertEquals(false, map.isTheTileAPath(1,1));
 
     }
 
@@ -20,8 +22,10 @@ class MapTest {
     public void testIsTheTileAWallh() throws Exception {
 
         Map map = new Map(10,10);
-        Tile tile = new Path(0,0);
-        assertEquals(false, map.isTheTileAWall(0,0));
+        map.addWall(0,0);
+        map.addPath(1,1);
+        assertEquals(true, map.isTheTileAWall(0,0));
+        assertEquals(false, map.isTheTileAWall(1,1));
 
     }
 
