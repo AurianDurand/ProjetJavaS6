@@ -16,24 +16,33 @@ public class EntityManager {
     public EntityManager() {
     }
 
-    public void createEntity(EntityType entityType, int x, int y, String assetPath) {
+    public Entity createEntity(EntityType entityType, int x, int y, String assetPath) {
+
+        // first, create the entity
+        Entity createdEntity = null;
         switch (entityType) {
             case PACMAN:
-                entities.add(new Pacman(x,y,assetPath));
+                createdEntity = new Pacman(assetPath);
                 break;
             case GHOST:
-                entities.add(new Ghost(x,y,assetPath));
+                createdEntity = new Ghost(assetPath);
                 break;
             case PACGUM:
-                entities.add(new PacGum(x,y,assetPath));
+                createdEntity = new PacGum(assetPath);
                 break;
             case SUPERPACGUM:
-                entities.add(new SuperPacGum(x,y,assetPath));
+                createdEntity = new SuperPacGum(assetPath);
                 break;
             case WALL:
-                entities.add(new Wall(x,y,assetPath));
+                createdEntity = new Wall(assetPath);
                 break;
         }
+
+        // second, save the entity into the entitiesList
+        entities.add(createdEntity);
+
+        // third, return the created entity
+        return createdEntity;
     }
 
     public ArrayList<Entity> getEntities() {
@@ -46,9 +55,5 @@ public class EntityManager {
 
     public void updateEntity() {
 
-    }
-
-    private boolean testCollide() {
-        return false;
     }
 }
