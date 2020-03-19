@@ -1,10 +1,8 @@
 package sample.entityManager.physicalEntities;
 
-import sample.map.Tile;
+public class Wall extends PhysicalEntity {
 
-public class Wall extends Tile {
-
-    public Wall(int x, int y) {
-        super(x, y);
+    public Wall(int x, int y, String assetPath) {
+        super(x, y, assetPath);
     }
 }
