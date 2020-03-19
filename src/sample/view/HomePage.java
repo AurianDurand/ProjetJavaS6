@@ -3,6 +3,7 @@ package sample.view;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,7 +13,13 @@ import java.net.URL;
 
 public class HomePage extends Parent {
 
+    private int width;
+    private int height;
+
     public HomePage(Stage primaryStage, int width, int height) {
+
+        this.width = width;
+        this.height = height;
 
         // -----------------------------------------------------------
         // import the home page image
@@ -57,18 +64,14 @@ public class HomePage extends Parent {
         // -----------------------------------------------------------
         // set actions for the buttons
 
-        buttonLevel1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Start level 1");
-            }
+        buttonLevel1.setOnAction(eventLoadLevel1 -> {
+            System.out.println("Start level 1");
+            this.loadLevel(primaryStage, width, height);
         });
 
-        buttonLevel2.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Start level 2");
-            }
+        buttonLevel2.setOnAction(eventLoadLevel2 -> {
+            System.out.println("Start level 2");
+            this.loadLevel(primaryStage, width, height);
         });
 
         buttonQuit.setOnAction(new EventHandler<ActionEvent>() {
@@ -94,5 +97,17 @@ public class HomePage extends Parent {
         this.getChildren().add(buttonLevel1);
         this.getChildren().add(buttonLevel2);
         this.getChildren().add(buttonQuit);
+    }
+
+    private void loadLevel(Stage primaryStage, int width, int height) {
+
+        // instantiate the new page
+        LevelPage levelPage = new LevelPage(primaryStage, width, height);
+
+        // create a new scene with the new page
+        Scene newScene = new Scene(levelPage, width, height);
+
+        // load the new scene
+        primaryStage.setScene(newScene);
     }
 }
