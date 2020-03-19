@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import sample.cours1.ModelePacmanSimple;
 import sample.cours1.VTerminal;
 import sample.map.Map;
+import sample.parser.TMXParser;
 
 public class Main extends Application {
 
@@ -17,19 +18,15 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        // launch(args);
 
         ModelePacmanSimple modele = new ModelePacmanSimple();
         VTerminal vue = new VTerminal(modele);
         modele.addObserver(vue);
         new Thread(modele).start();
+    }
 
-        // test to verify if the map works properly
-        Map map = new Map(10,10);
 
+    public static void main(String[] args) {
+        launch(args);
     }
 }
