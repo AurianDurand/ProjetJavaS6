@@ -2,19 +2,17 @@ package sample.entityManager;
 
 import sample.map.Tile;
 
+import java.awt.*;
+
 public class Entity {
 
-    private Tile tile;
+    private String assetPath;
 
-    public Entity(Tile tile) {
-        this.tile = tile;
+    public Entity(String assetPath) {
+        this.assetPath = assetPath;
     }
 
     public void onCollide(Entity entity) {
 
-    }
-
-    public Tile getTile() {
-        return tile;
     }
 }

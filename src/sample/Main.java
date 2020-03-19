@@ -25,6 +25,7 @@ public class Main extends Application {
         new Thread(modele).start();
     }
 
+        Game game = new Game();
 
     public static void main(String[] args) {
         launch(args);

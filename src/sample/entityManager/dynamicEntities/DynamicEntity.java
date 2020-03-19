@@ -5,8 +5,8 @@ import sample.map.Tile;
 
 public class DynamicEntity extends Entity {
 
-    public DynamicEntity(Tile tile) {
-        super(tile);
+    public DynamicEntity(String assetPath) {
+        super(assetPath);
     }
 
     public void move() {
