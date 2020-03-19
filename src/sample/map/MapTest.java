@@ -1,6 +1,7 @@
 package sample.map;
 
 import org.junit.jupiter.api.Test;
+import sample.entityManager.Entity;
 import sun.jvm.hotspot.utilities.Assert;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,25 +9,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapTest {
 
     @Test
-    public void testIsTheTileAPath() throws Exception {
-
+    void addEntityOnTile() {
         Map map = new Map(10,10);
-        map.addPath(0,0);
-        map.addWall(1,1);
-        assertEquals(true, map.isTheTileAPath(0,0));
-        assertEquals(false, map.isTheTileAPath(1,1));
-
+        Entity entity = new Entity(2,4,"");
+        map.addEntityOnTile(entity,2,4);
+        assertEquals(true, map.getTile(2,4).getEntities().size() == 1);
     }
 
     @Test
-    public void testIsTheTileAWallh() throws Exception {
-
-        Map map = new Map(10,10);
-        map.addWall(0,0);
-        map.addPath(1,1);
-        assertEquals(true, map.isTheTileAWall(0,0));
-        assertEquals(false, map.isTheTileAWall(1,1));
-
+    void generateTiles() {
+        Map map = new Map(3,3);
+        assertEquals(true, map.getTile(0,0) != null);
+        assertEquals(true, map.getTile(2,1) != null);
+        assertEquals(true, map.getTile(0,2) != null);
     }
 
+    @Test
+    void removeEntityOnTile() {
+        Map map = new Map(10,10);
+        Entity entity = new Entity(2,4,"");
+        map.addEntityOnTile(entity,2,4);
+        assertEquals(true, map.getTile(2,4).getEntities().size() == 1);
+        map.removeEntityOnTile(entity, 2,4);
+        assertEquals(true, map.getTile(2,4).getEntities().size() == 0);
+    }
 }

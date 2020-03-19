@@ -2,8 +2,7 @@ package sample.map;
 
 import sample.entityManager.Entity;
 import sample.entityManager.dynamicEntities.DynamicEntity;
-
-import java.util.ArrayList;
+import sample.entityManager.physicalEntities.Wall;
 
 public class Map {
 
@@ -18,12 +17,14 @@ public class Map {
         this.tiles = new Tile[width][height];
         this.width = width;
         this.height = height;
+
+        generateTiles();
     }
 
     /**
      * this method generate the tiles based on a given width and height
      */
-    /*private void generateTiles() {
+    private void generateTiles() {
 
         for (int i = 0; i < this.width; i++) {
             for (int j = 0; j < this.height; j++) {
@@ -32,29 +33,18 @@ public class Map {
 
             }
         }
-    }*/
-
-    public void addPath(int x, int y) {
-        this.tiles[x][y] = new Path(x, y);
     }
 
-    public void addWall(int x, int y) {
-        this.tiles[x][y] = new Wall(x, y);
+    public Tile getTile(int x, int y) {
+        return this.tiles[x][y];
     }
 
-    public void addObjectOnTile(Object object, int x, int y) {
-        this.tiles[x][y].setObject((sample.entityManager.objects.Object) object);
+    public void addEntityOnTile(Entity entity, int x, int y) {
+        this.tiles[x][y].addEntity(entity);
     }
 
-    public void addDynamicEntityOnTile(DynamicEntity dynamicEntity, int x, int y) {
-        this.tiles[x][y].setDynamicEntity(dynamicEntity);
+    public void removeEntityOnTile(Entity entity, int x, int y) {
+        this.tiles[x][y].removeEntity(entity);
     }
 
-    public boolean isTheTileAPath(int x, int y) {
-        return tiles[x][y]instanceof Path;
-    }
-
-    public boolean isTheTileAWall(int x, int y) {
-        return tiles[x][y]instanceof Wall;
-    }
 }

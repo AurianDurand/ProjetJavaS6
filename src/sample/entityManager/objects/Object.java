@@ -5,7 +5,7 @@ import sample.map.Tile;
 
 public class Object extends Entity {
 
-    public Object(Tile tile) {
-        super(tile);
+    public Object(int x, int y, String assetPath) {
+        super(x, y, assetPath);
     }
 }

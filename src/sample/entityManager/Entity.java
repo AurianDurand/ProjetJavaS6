@@ -2,19 +2,23 @@ package sample.entityManager;
 
 import sample.map.Tile;
 
+import java.awt.*;
+
 public class Entity {
 
-    private Tile tile;
+    private Point point = new Point();
+    private String assetPath;
 
-    public Entity(Tile tile) {
-        this.tile = tile;
+    public Entity(int x, int y, String assetPath) {
+        this.point.setLocation(x,y);
+        this.assetPath = assetPath;
     }
 
     public void onCollide(Entity entity) {
 
     }
 
-    public Tile getTile() {
-        return tile;
+    public Point getPoint() {
+        return this.point;
     }
 }

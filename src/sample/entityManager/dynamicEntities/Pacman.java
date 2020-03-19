@@ -6,7 +6,7 @@ public class Pacman extends DynamicEntity {
 
     private int lifes = 3;
 
-    public Pacman(Tile tile) {
-        super(tile);
+    public Pacman(int x, int y, String assetPath) {
+        super(x, y, assetPath);
     }
 }

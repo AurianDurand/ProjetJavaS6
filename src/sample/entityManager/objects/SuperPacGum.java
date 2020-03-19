@@ -4,7 +4,7 @@ import sample.map.Tile;
 
 public class SuperPacGum extends Object {
 
-    public SuperPacGum(Tile tile) {
-        super(tile);
+    public SuperPacGum(int x, int y, String assetPath) {
+        super(x, y, assetPath);
     }
 }

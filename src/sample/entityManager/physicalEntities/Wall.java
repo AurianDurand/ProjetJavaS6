@@ -1,4 +1,6 @@
-package sample.map;
+package sample.entityManager.physicalEntities;
+
+import sample.map.Tile;
 
 public class Wall extends Tile {
 

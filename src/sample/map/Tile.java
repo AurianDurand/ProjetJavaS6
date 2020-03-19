@@ -1,19 +1,21 @@
 package sample.map;
 
+import sample.entityManager.Entity;
 import sample.entityManager.dynamicEntities.DynamicEntity;
 import sample.entityManager.objects.Object;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Tile {
 
-    private int x;
-    private int y;
+    private Point point = new Point();
 
-    private Object object = null;
-    private DynamicEntity dynamicEntity = null;
+    private ArrayList<Entity> entities = new ArrayList<>();
 
     public Tile(int x, int y) {
-        this.x = x;
-        this.y = y;
+
+        this.point.setLocation(x,y);
     }
 
 
@@ -21,26 +23,24 @@ public class Tile {
     // *** getters and setters ***
 
     public int getX() {
-        return x;
+        return this.point.x;
     }
 
     public int getY() {
-        return y;
+        return this.point.y;
     }
 
-    public Object getObject() {
-        return object;
+    public ArrayList<Entity> getEntities() {
+        return this.entities;
     }
 
-    public DynamicEntity getDynamicEntity() {
-        return dynamicEntity;
+
+    public void addEntity(Entity entity) {
+        this.entities.add(entity);
     }
 
-    public void setObject(Object object) {
-        this.object = object;
+    public void removeEntity(Entity entity) {
+        this.entities.remove(entity);
     }
 
-    public void setDynamicEntity(DynamicEntity dynamicEntity) {
-        this.dynamicEntity = dynamicEntity;
-    }
 }

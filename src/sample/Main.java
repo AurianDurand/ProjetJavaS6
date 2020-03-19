@@ -23,10 +23,12 @@ public class Main extends Application {
     public static void main(String[] args) {
         // launch(args);
 
+        /*
         ModelePacmanSimple modele = new ModelePacmanSimple();
         VTerminal vue = new VTerminal(modele);
         modele.addObserver(vue);
         new Thread(modele).start();
+        */
 
         // test to verify if the map works properly
         Map map = new Map(10,10);

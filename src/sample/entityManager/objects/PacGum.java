@@ -4,7 +4,7 @@ import sample.map.Tile;
 
 public class PacGum extends Object {
 
-    public PacGum(Tile tile) {
-        super(tile);
+    public PacGum(int x, int y, String assetPath) {
+        super(x, y, assetPath);
     }
 }
