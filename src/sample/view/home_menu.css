@@ -1,0 +1,4 @@
+.bodybg{
+ -fx-background-image: url('../../../Res/Textures/background_menu.jpg');
+ -fx-background-size: 100% 100%;
+}
