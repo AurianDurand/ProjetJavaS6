@@ -1,8 +1,12 @@
 package sample;
 
 import sample.map.Map;
+import sample.parser.Layers;
+import sample.parser.TMXParser;
+import sample.parser.Tile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class LevelManager {
 
@@ -13,38 +17,37 @@ public class LevelManager {
         this.mapName = mapName;
 
         // first, call the parser to get the map elements
-        this.callParser();
+        Layers clayers = this.callParser();
 
         // second, instantiate the map with the size returned by the parser
-        this.map = new Map(10,10);
+        this.map = new Map(clayers.getWidth(),clayers.getHeight());
 
         // third, build the map with the elements returned by the parser
-        this.buildMap();
+        this.buildMap(clayers);
     }
 
     /**
      * this method build the map with all entities (walls, pacman, ghosts, etc)
      */
-    private void buildMap() {
+    private void buildMap(Layers cLayers) {
 
-        // first, call the parser
-        ArrayList<Object> parserOutput = this.callParser();
+        this.map.buildMap(cLayers);
 
-        // build the map here
-        this.map.buildMap(parserOutput);
     }
 
     /**
      * this method call the parser and implements the map
      * and entities (objects and dynamic entities)
      */
-    private ArrayList<Object> callParser() {
+    private Layers callParser() {
 
-        // instantiate the parser here
+        // instantiate the parser
+        TMXParser parser = new TMXParser();
 
-        // then call its parse method
+        // call its parse method
+        Layers cLayers = parser.Parse("Res/Maps/", "map_1.tmx");
 
         // return the parse output
-        return null;
+        return cLayers;
     }
 }

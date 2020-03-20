@@ -4,8 +4,11 @@ import sample.entityManager.Entity;
 import sample.entityManager.EntityManager;
 import sample.entityManager.EntityType;
 
+import sample.parser.Layers;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Map {
 
@@ -37,17 +40,75 @@ public class Map {
         }
     }
 
-    public void buildMap(ArrayList<Object> paserOutput) {
+    public void buildMap(Layers cLayers) {
 
-        // let's suppose we have a 10*10 map
+        List<sample.parser.Tile[][]> layers = cLayers.getLayers();
 
-        this.createEntity(EntityType.PACMAN,1,1,"assets/theme1");
-        this.createEntity(EntityType.GHOST,8,1,"assets/theme1");
-        this.createEntity(EntityType.GHOST,8,8,"assets/theme1");
-        this.createEntity(EntityType.PACGUM,1,2,"assets/theme1");
-        this.createEntity(EntityType.PACGUM,1,4,"assets/theme1");
-        this.createEntity(EntityType.PACGUM,2,1,"assets/theme1");
-        this.createEntity(EntityType.PACGUM,4,2,"assets/theme1");
+        if(layers != null){
+
+            // for each layer
+            for(sample.parser.Tile[][] layer : layers){
+
+                // for each tile
+                for(int i = 0; i < layer.length; i++){
+                    for(int j = 0; j < layer[i].length; j++){
+
+                        // if the tile contains something (an entity)
+                        if(layer[i][j] != null) {
+
+                            System.out.print(layer[i][j].getGid()); // getter -> Source, taille, posTexture, type
+                            System.out.print(layer[i][j].getSource());
+                            System.out.print(layer[i][j].getCoordTextureX());
+                            System.out.print(layer[i][j].getCoordTextureY());
+                            System.out.print(layer[i][j].getType());
+
+                            // create the entity
+
+                            if (layer[i][j].getType() != null) {
+
+                                switch (layer[i][j].getType()) {
+                                    case "PACMAN":
+
+                                        // i and j are inverted because for the parser, j = lines = x and i = columns = y
+                                        this.createEntity(EntityType.PACMAN, j, i, layer[i][j].getSource());
+                                        break;
+                                    case "GHOST":
+                                        this.createEntity(EntityType.GHOST, j, i, layer[i][j].getSource());
+                                        break;
+                                    case "PACGUM":
+                                        this.createEntity(EntityType.PACGUM, j, i, layer[i][j].getSource());
+                                        break;
+                                    case "SUPERPACGUM":
+                                        this.createEntity(EntityType.SUPERPACGUM, j, i, layer[i][j].getSource());
+                                        break;
+                                    case "WALL":
+                                        this.createEntity(EntityType.WALL, j, i, layer[i][j].getSource());
+                                        break;
+                                }
+                            }
+
+                        }
+                        // if the tile is empty on this layer
+                        else {
+                            System.out.print("0");
+                        }
+
+                        System.out.print(", ");
+                    }
+                    System.out.println("");
+                }
+                System.out.println("");
+            }
+        }
+
+        System.out.println("Map de taille : " + cLayers.getWidth() + " : " + cLayers.getHeight());
+        System.out.println("Tile de taille : " + cLayers.getTilewidth() + " : " + cLayers.getTileheight());
+
+        System.out.println("number of entities : " + this.entityManager.getEntities().size());
+        System.out.println("0,0 : "+this.getEntitiesOnTile(0,0));
+        System.out.println("1,1 : "+this.getEntitiesOnTile(1,1));
+        System.out.println("8,1 : "+this.getEntitiesOnTile(8,1));
+
     }
 
     public Tile getTile(int x, int y) {
