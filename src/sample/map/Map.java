@@ -4,6 +4,7 @@ import sample.entityManager.Entity;
 import sample.entityManager.EntityManager;
 import sample.entityManager.EntityType;
 
+import sample.entityManager.dynamicEntities.DynamicEntity;
 import sample.parser.Layers;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Map {
     private HashMap<Entity, Tile> entitiesPosition = new HashMap<>();
     private int width;
     private int height;
-    private EntityManager entityManager= new EntityManager();
+    private EntityManager entityManager= new EntityManager(this);
 
     public Map(int width, int height) {
 
@@ -117,6 +118,42 @@ public class Map {
 
     public ArrayList<Entity> getEntitiesOnTile(int x, int y) {
         return this.tiles[x][y].getEntities();
+    }
+
+    public void moveAllDynamicEntities() {
+
+        // search the dynamic entities
+        for (Entity entity : this.entityManager.getEntities()) {
+            if(entity instanceof DynamicEntity) {
+
+                int currentX = this.entitiesPosition.get(entity).getX();
+                int currentY = this.entitiesPosition.get(entity).getY();
+
+                // handle each move case
+                switch (((DynamicEntity) entity).getBuffer()) {
+                    case UP:
+
+                        // get the entities on the tile to move on
+                        ArrayList<Entity> entitiesOnTileToMOveOn = this.tiles[currentX][currentY-1].getEntities();
+
+                        // ask the entity manager to handle the collide case
+                        boolean canTheEntityMove = this.entityManager.onCollide(entity, entitiesOnTileToMOveOn);
+
+                        if(canTheEntityMove) {
+
+                            // move the entity here
+                        }
+
+                        break;
+                    case DOWN:
+                        break;
+                    case LEFT:
+                        break;
+                    case RIGHT:
+                        break;
+                }
+            }
+        }
     }
 
     public void createEntity(EntityType entityType, int x, int y, String assetPath) {

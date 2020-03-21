@@ -3,13 +3,24 @@ package sample.entityManager.dynamicEntities;
 import sample.entityManager.Entity;
 import sample.map.Tile;
 
-public class DynamicEntity extends Entity {
+public class DynamicEntity implements Entity {
+
+    private String assetPath;
+    private Direction buffer = Direction.RIGHT;
 
     public DynamicEntity(String assetPath) {
-        super(assetPath);
+        this.assetPath = assetPath;
     }
 
-    public void move() {
+    public Direction getBuffer() {
+        return buffer;
+    }
 
+    public void setBuffer(Direction buffer) {
+        this.buffer = buffer;
+    }
+
+    public String getAssetPath() {
+        return assetPath;
     }
 }
