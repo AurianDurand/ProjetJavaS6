@@ -16,6 +16,7 @@ public class EntityManager {
 
     private Map map;
     private ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<Entity> entitiesToDelete = new ArrayList<>();
 
     public EntityManager(Map map) {
         this.map = map;
@@ -64,8 +65,6 @@ public class EntityManager {
      */
     public boolean onCollide(Entity entityToMove, ArrayList<Entity> entitiesOnTargetTile) {
 
-        System.out.println(entitiesOnTargetTile);
-
         // for each entity on the target tile
         for (Entity entityOnTargetTile : entitiesOnTargetTile) {
 
@@ -80,8 +79,8 @@ public class EntityManager {
                 // an object can be picked up only by Pac-Man
                 if (entityToMove instanceof Pacman) {
 
-                    // destroy the object instance
-//                    this.map.destroyEntity(entityOnTargetTile); // ask the map to do so to delete the entity from the HashMap and Tile as well
+                    // add the entity to the destroy list to destroy the object instance
+                    entitiesToDelete.add(entityOnTargetTile);
 
                     // increment the points obtained by the player
                     ((Pacman) entityToMove).gainOnePoint();
@@ -103,11 +102,17 @@ public class EntityManager {
                         if(((Pacman) entityToMove).getLifes() == 0) {
 
                             // GAME OVER
+                            this.entitiesToDelete.add(entityToMove); // delete Pac-Man because he has no life left
                         }
                     }
                 }
             }
         }
+
         return true;
+    }
+
+    public ArrayList<Entity> getEntitiesToDelete() {
+        return entitiesToDelete;
     }
 }
