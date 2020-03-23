@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="center" hgap="10" maxHeight="900.0" maxWidth="1500.0" minHeight="900.0" minWidth="1500.0" prefHeight="900.0" prefWidth="1500.0" styleClass="bodybg" stylesheets="@home.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Home_controller">
+   <children>
+      <Button fx:id="btn_play" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPlayPressed" prefHeight="63.0" prefWidth="280.0" text="Play" GridPane.halignment="CENTER" GridPane.rowIndex="20">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets top="20.0" />
+         </GridPane.margin>
+      </Button>
+      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="65.0" prefWidth="281.0" text="Options" GridPane.halignment="CENTER" GridPane.rowIndex="21">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets top="20.0" />
+         </GridPane.margin>
+      </Button>
+      <Button fx:id="btn_quit" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onQuitPressed" prefHeight="65.0" prefWidth="281.0" text="Quit" GridPane.halignment="CENTER" GridPane.rowIndex="22">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="150.0" top="20.0" />
+         </GridPane.margin>
+      </Button>
+      <ImageView fitHeight="65.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true" scaleX="3.0" scaleY="3.0" GridPane.halignment="CENTER" GridPane.rowIndex="19">
+         <image>
+            <Image url="@../../../Res/Textures/Title.png" />
+         </image>
+         <GridPane.margin>
+            <Insets bottom="180.0" />
+         </GridPane.margin>
+      </ImageView>
+   </children>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+</GridPane>
