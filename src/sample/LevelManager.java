@@ -1,20 +1,22 @@
 package sample;
 
+import sample.entityManager.Entity;
 import sample.map.Map;
+import sample.map.Tile;
 import sample.parser.Layers;
 import sample.parser.TMXParser;
-import sample.parser.Tile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LevelManager {
 
     private Map map;
-    private String mapName;
+    private String mapPath;
 
-    public LevelManager(String mapName) {
-        this.mapName = mapName;
+    public LevelManager(String mapPath) {
+        this.mapPath = mapPath;
 
         // first, call the parser to get the map elements
         Layers clayers = this.callParser();
@@ -24,6 +26,20 @@ public class LevelManager {
 
         // third, build the map with the elements returned by the parser
         this.buildMap(clayers);
+    }
+
+    /**
+     * ask the map to move all dynamic entities if they are allowed to do so
+     */
+    public void moveAllDynamicEntities() {
+        this.map.moveAllDynamicEntities();
+    }
+
+    /**
+     * @return a HashMap with all entities positions
+     */
+    public HashMap<Entity, Tile> getEntitiesPosition() {
+        return this.map.getEntitiesPosition();
     }
 
     /**

@@ -64,6 +64,8 @@ public class EntityManager {
      */
     public boolean onCollide(Entity entityToMove, ArrayList<Entity> entitiesOnTargetTile) {
 
+        System.out.println(entitiesOnTargetTile);
+
         // for each entity on the target tile
         for (Entity entityOnTargetTile : entitiesOnTargetTile) {
 
@@ -79,7 +81,7 @@ public class EntityManager {
                 if (entityToMove instanceof Pacman) {
 
                     // destroy the object instance
-                    this.map.destroyEntity(entityOnTargetTile); // ask the map to do so to delete the entity from the HashMap and Tile as well
+//                    this.map.destroyEntity(entityOnTargetTile); // ask the map to do so to delete the entity from the HashMap and Tile as well
 
                     // increment the points obtained by the player
                     ((Pacman) entityToMove).gainOnePoint();
