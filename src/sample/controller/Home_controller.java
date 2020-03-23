@@ -62,7 +62,7 @@ public class Home_controller {
 
 
         Stage stage = (Stage)((Node)(event.getSource())).getScene().getWindow();
-        stage.setScene(game.getScene());
+//        stage.setScene(game.getScene());
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);
