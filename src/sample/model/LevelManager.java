@@ -1,4 +1,4 @@
-package sample;
+package sample.model;
 
 import sample.map.Map;
 
@@ -8,6 +8,10 @@ public class LevelManager {
 
     private Map map;
     private String mapName;
+
+    public LevelManager() {
+
+    }
 
     public LevelManager(String mapName) {
         this.mapName = mapName;
