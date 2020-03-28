@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" maxHeight="900.0" maxWidth="1500.0" minHeight="900.0" minWidth="1500.0" prefHeight="900.0" prefWidth="1500.0" styleClass="bodybg" stylesheets="@home.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Home_controller">
+<GridPane alignment="center" hgap="10" prefHeight="900.0" prefWidth="1500.0" styleClass="bodybg" stylesheets="@home.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Home_controller">
    <children>
       <Button fx:id="btn_play" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPlayPressed" prefHeight="63.0" prefWidth="280.0" text="Play" GridPane.halignment="CENTER" GridPane.rowIndex="20">
          <font>
@@ -37,7 +37,7 @@
       </Button>
       <ImageView fitHeight="65.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true" scaleX="3.0" scaleY="3.0" GridPane.halignment="CENTER" GridPane.rowIndex="19">
          <image>
-            <Image url="@../../../Res/Textures/Title.png" />
+            <Image url="@../../res/textures/Title.png" />
          </image>
          <GridPane.margin>
             <Insets bottom="180.0" />

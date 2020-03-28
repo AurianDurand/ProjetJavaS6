@@ -2,19 +2,17 @@ package sample.controller;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sample.model.MGame;
-import sample.view.VGame;
+import sample.view.GameVC;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class Home_controller {
     private  MGame game;
@@ -32,41 +30,58 @@ public class Home_controller {
 //            e.printStackTrace();
 //        }
 
-
-
-        GridPane grid = new GridPane();
-        grid.requestFocus();
-
-        int SIZE_X = 10;
-        int SIZE_Y = 10;
-        ImageView[][] tab = new ImageView[SIZE_X][SIZE_Y];
-        Image imga = new Image("sample/wall.png");
-
-
-        for (int i = 0; i < SIZE_X; i++) { // initialisation de la grille (sans image)
-            for (int j = 0; j < SIZE_Y; j++) {
-                ImageView img = new ImageView();
-
-                tab[i][j] = img;
-                tab[i][j].setImage(imga);
-
-                grid.add(img, i, j);
-            }
+        game = new MGame();
+        if(!game.initialization()) {
+            System.out.println("Error init game");
+            return;
         }
 
-        game = new MGame();
+        Stage stage = (Stage)((Node)(event.getSource())).getScene().getWindow();
 
-        VGame vgame = new VGame(game);
+        GameVC vgame = new GameVC(game, 1500.0, 900.0);
+
+
+        Scene gameScene = new Scene(vgame);
+
+        ArrayList<String> input = new ArrayList<String>();
+
+        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                String code = keyEvent.getCode().toString();
+                if(!input.contains(code)) {
+                    input.add(code);
+                    game.getMap().moveEntity("PACMAN");
+                }
+//                switch (event.getCode()) {
+//                    case Z:
+//                        System.out.println("Z");
+//                        break;
+//                    case Q:
+//                        System.out.println("Q");
+//                        break;
+//                    case S:
+//                        break;
+//                    case D:
+//                        break;
+//                    default:
+//                        break;
+//                }
+            }
+        });
+        gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                String code = keyEvent.getCode().toString();
+                input.remove( code );
+            }
+        });
+
+        stage.setScene(gameScene);
+//        stage.show();
+
         game.addObserver(vgame);
         game.start();
-
-
-        Stage stage = (Stage)((Node)(event.getSource())).getScene().getWindow();
-//        stage.setScene(game.getScene());
-
-        StackPane root = new StackPane();
-        root.getChildren().add(grid);
-        stage.setScene(new Scene(root, stage.getMaxWidth(), stage.getMaxHeight()));
     }
 
     public void quit() {

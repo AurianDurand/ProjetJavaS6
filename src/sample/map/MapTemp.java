@@ -7,7 +7,7 @@ import sample.entityManager.EntityType;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Map {
+public class MapTemp {
 
     private Tile[][] tiles;
     private HashMap<Entity, Tile> entitiesPosition = new HashMap<>();
@@ -15,7 +15,7 @@ public class Map {
     private int height;
     private EntityManager entityManager= new EntityManager();
 
-    public Map(int width, int height) {
+    public MapTemp(int width, int height) {
 
         this.tiles = new Tile[width][height];
         this.width = width;

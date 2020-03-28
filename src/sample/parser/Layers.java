@@ -8,7 +8,7 @@ public class Layers {
     private int height;
     private int tilewidth;
     private int tileheight;
-    List<Tile[][]> layers;
+    private List<Tile[][]> layers;
 
     public Layers(int width, int height, int tilewidth, int tileheight){
         this.width = width;

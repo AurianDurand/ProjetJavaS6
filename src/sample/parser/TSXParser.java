@@ -39,7 +39,7 @@ public class TSXParser {
 
                 for(int i = 0; i < rows; i++){
                     for(int j = 0; j < columns; j++){
-                        tiles.add(new Tile(firstgid, source, j, i, width, height));
+                        tiles.add(new Tile(firstgid, source, j, i, tilewidth, tileheight));
                         firstgid++;
                     }
                 }
