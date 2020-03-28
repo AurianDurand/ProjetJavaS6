@@ -68,7 +68,6 @@ public class Map {
     private void addEntity(int idLayer, Point pos, BasicEntity entity) {
         if(idLayer < this.entityMaps.size()) {
             this.entityMaps.get(idLayer).put(pos, entity);
-            System.out.print(entity.getTile().getGid()+";");
         }
     }
 
