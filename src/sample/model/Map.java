@@ -17,7 +17,6 @@ public class Map {
         RIGHT
     }
 
-//    private HashMap<Point, ArrayList<BasicEntity>> mEntities = new HashMap<Point, ArrayList<BasicEntity>>();
     private Point size;
     private Point tilesize;
     private int nbLayer;
@@ -41,7 +40,6 @@ public class Map {
             }
         }
         return e;
-//        return mEntities.get(point);
     }
 
     public boolean moveEntity(String entityType) {
@@ -72,11 +70,6 @@ public class Map {
             this.entityMaps.get(idLayer).put(pos, entity);
             System.out.print(entity.getTile().getGid()+";");
         }
-        else {
-            System.out.println("test");
-        }
-//        mEntities.computeIfAbsent(pos, k -> new ArrayList<BasicEntity>());
-//        mEntities.get(pos).add(entity);
     }
 
     public boolean create(Layers data) {
@@ -103,27 +96,9 @@ public class Map {
                                 //Si il n'y en a pas, on n'en créer une. Sinon on ajoute une autre entité
                                 this.addEntity(k, new Point(j, i), new BasicEntity(layer[i][j]));
                             }
-                            else{
-                                System.out.print("0;");
-                            }
                         }
-                        System.out.println("");
                     }
-                    System.out.println("");
                 }
-
-//                for(Tile[][] layer : layers) {
-//                    //On parcourt chaque case
-//                    for (int i = 0; i < layer.length; i++) {
-//                        for (int j = 0; j < layer[i].length; j++) {
-//                            //si la case est pleine
-//                            if (layer[i][j] != null) {
-//                                //Si il n'y en a pas, on n'en créer une. Sinon on ajoute une autre entité
-//                                this.addEntity(new Point(j, i), new BasicEntity(layer[i][j]));
-//                            }
-//                        }
-//                    }
-//                }
 //                this.display();
                 return true;
             }
