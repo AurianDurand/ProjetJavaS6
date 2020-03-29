@@ -48,11 +48,11 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
 
-        ModelePacmanSimple modele = new ModelePacmanSimple();
-        VTerminal vue = new VTerminal(modele);
-        modele.addObserver(vue);
-        new Thread(modele).start();
-
-        Game game = new Game();
+//        ModelePacmanSimple modele = new ModelePacmanSimple();
+//        VTerminal vue = new VTerminal(modele);
+//        modele.addObserver(vue);
+//        new Thread(modele).start();
+//
+//        Game game = new Game();
     }
 }
