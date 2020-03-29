@@ -2,9 +2,11 @@ package sample.entityManager.physicalEntities;
 
 import sample.entityManager.Entity;
 
-public class PhysicalEntity extends Entity {
+public class PhysicalEntity implements Entity {
+
+    private String assetPath;
 
     public PhysicalEntity(String assetPath) {
-        super(assetPath);
+        this.assetPath = assetPath;
     }
 }
