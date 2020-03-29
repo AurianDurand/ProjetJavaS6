@@ -41,7 +41,7 @@ public class MGame extends Observable implements Runnable {
             notifyObservers(); // notification de l'observer
 
             try {
-                Thread.sleep(50); // pause
+                Thread.sleep(30); // pause
             } catch (InterruptedException ex) {
                 Logger.getLogger(MGame.class.getName()).log(Level.SEVERE, null, ex);
             }

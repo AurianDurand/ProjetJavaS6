@@ -8,9 +8,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class Map {
-    enum DIRECTION {
+    public enum DIRECTION {
         UP,
         DOWN,
         LEFT,
@@ -22,13 +23,24 @@ public class Map {
     private int nbLayer;
     private Layers layers;
     private ArrayList<HashMap<Point, BasicEntity>> entityMaps;
+    private Stack<DIRECTION> stackInput;
 
     public Point getSize() { return this.size; }
     public Point getTilesize() { return this.tilesize; }
     public int getNbLayer() { return this.nbLayer; }
 
+    public ArrayList<HashMap<Point, BasicEntity>> getLayers() { return this.entityMaps; }
+
     public Map() {
         this.entityMaps = new ArrayList<>();
+        this.stackInput = new Stack<>();
+    }
+
+    public BasicEntity getEntityByPosition(Point point, int idLayer) {
+        if(idLayer < this.entityMaps.size()) {
+            return this.entityMaps.get(idLayer).get(point);
+        }
+        return null;
     }
 
     public ArrayList<BasicEntity> getEntitiesByPosition(Point point) {
@@ -40,6 +52,35 @@ public class Map {
             }
         }
         return e;
+    }
+
+    public void pushInput(DIRECTION key) {
+        if(this.stackInput.isEmpty() || (!this.stackInput.peek().equals(key) && this.stackInput.size() < 10)) {
+            this.stackInput.push(key);
+            System.out.println(stackInput);
+        }
+        for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
+            for (HashMap.Entry<Point, BasicEntity> entry : hashMap.entrySet()) {
+                if(entry.getValue().getTile().getType().equals("PACMAN")) {
+                    Point p = new Point(0, 0);
+                    if(key == DIRECTION.UP) {
+                        p.y -= 1;
+                    }
+                    else if(key == DIRECTION.DOWN) {
+                        p.y += 1;
+                    }
+                    else if(key == DIRECTION.LEFT) {
+                        p.x -= 1;
+                    }
+                    else if(key == DIRECTION.RIGHT) {
+                        p.x += 1;
+                    }
+                    hashMap.put(new Point(entry.getKey().x + p.x, entry.getKey().y + p.y), entry.getValue());
+                    hashMap.remove(entry.getKey());
+                    return;
+                }
+            }
+        }
     }
 
     public boolean moveEntity(String entityType) {
