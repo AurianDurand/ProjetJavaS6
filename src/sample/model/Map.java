@@ -1,5 +1,6 @@
 package sample.model;
 
+import javafx.util.Pair;
 import sample.model.entities.BasicEntity;
 import sample.parser.Layers;
 import sample.parser.Tile;
@@ -59,6 +60,8 @@ public class Map {
             this.stackInput.push(key);
             System.out.println(stackInput);
         }
+
+        ArrayList<Pair<Pair<Point, Point>, BasicEntity>> entitiesToMove = new ArrayList<>();
         for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
             for (HashMap.Entry<Point, BasicEntity> entry : hashMap.entrySet()) {
                 if(entry.getValue().getTile().getType().equals("PACMAN")) {
@@ -75,10 +78,16 @@ public class Map {
                     else if(key == DIRECTION.RIGHT) {
                         p.x += 1;
                     }
-                    hashMap.put(new Point(entry.getKey().x + p.x, entry.getKey().y + p.y), entry.getValue());
-                    hashMap.remove(entry.getKey());
-                    return;
+                    Point p1 = entry.getKey();
+                    Point p2 = new Point(entry.getKey().x + p.x,entry.getKey().y + p.y);
+                    BasicEntity entity = entry.getValue();
+
+                    entitiesToMove.add(new Pair<>(new Pair<>(p1, p2), entity));
                 }
+            }
+            for(Pair<Pair<Point, Point>, BasicEntity> e : entitiesToMove) {
+                hashMap.put(e.getKey().getValue(), e.getValue());
+                hashMap.remove(e.getKey().getKey());
             }
         }
     }
