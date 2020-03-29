@@ -5,13 +5,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sample.model.MGame;
-import sample.model.Map;
+import sample.model.MMap;
 import sample.view.GameVC;
 
 import java.util.ArrayList;
@@ -53,16 +51,16 @@ public class Home_controller {
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case Z:
-                        game.getMap().pushInput(Map.DIRECTION.UP);
+                        game.getMap().pushInput(MMap.DIRECTION.UP);
                         break;
                     case Q:
-                        game.getMap().pushInput(Map.DIRECTION.LEFT);
+                        game.getMap().pushInput(MMap.DIRECTION.LEFT);
                         break;
                     case S:
-                        game.getMap().pushInput(Map.DIRECTION.DOWN);
+                        game.getMap().pushInput(MMap.DIRECTION.DOWN);
                         break;
                     case D:
-                        game.getMap().pushInput(Map.DIRECTION.RIGHT);
+                        game.getMap().pushInput(MMap.DIRECTION.RIGHT);
                         break;
                     default:
                         break;

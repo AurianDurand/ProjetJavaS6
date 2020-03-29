@@ -4,7 +4,7 @@ import sample.parser.Layers;
 import sample.parser.TMXParser;
 import java.util.HashMap;
 
-public class LevelManager {
+public class MLevelManager {
     enum Level {
         LEVEL_1,
         LEVEL_2,
@@ -14,9 +14,9 @@ public class LevelManager {
     }
 
     private HashMap<Level, String> maps;
-    private Map map;
+    private MMap map;
 
-    public LevelManager() {
+    public MLevelManager() {
         maps = new HashMap<>();
     }
 
@@ -24,7 +24,7 @@ public class LevelManager {
         this.maps = maps;
     }
 
-    public Map getMap() {
+    public MMap getMap() {
         return this.map;
     }
 
@@ -36,7 +36,7 @@ public class LevelManager {
         TMXParser parser = new TMXParser();
         Layers layers = parser.Parse("src/res/maps/", maps.get(level));
 
-        map = new Map();
+        map = new MMap();
         return map.create(layers);
     }
 }

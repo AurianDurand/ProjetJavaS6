@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-public class Map {
+public class MMap {
     public enum DIRECTION {
         UP,
         DOWN,
@@ -32,7 +32,7 @@ public class Map {
 
     public ArrayList<HashMap<Point, BasicEntity>> getLayers() { return this.entityMaps; }
 
-    public Map() {
+    public MMap() {
         this.entityMaps = new ArrayList<>();
         this.stackInput = new Stack<>();
     }
@@ -64,7 +64,7 @@ public class Map {
         ArrayList<Pair<Pair<Point, Point>, BasicEntity>> entitiesToMove = new ArrayList<>();
         for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
             for (HashMap.Entry<Point, BasicEntity> entry : hashMap.entrySet()) {
-                if(entry.getValue().getTile().getType().equals("WALL")) {
+                if(entry.getValue().getTile().getType().equals("PACMAN")) {
                     Point p = new Point(0, 0);
                     if(key == DIRECTION.UP) {
                         p.y -= 1;

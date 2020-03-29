@@ -7,16 +7,16 @@ import java.util.logging.Logger;
 
 public class MGame extends Observable implements Runnable {
 
-    private LevelManager levelManager;
+    private MLevelManager levelManager;
     private Thread th;
     private boolean isRunning;
 
     public MGame() {
-        this.levelManager = new LevelManager();
-        HashMap<LevelManager.Level, String> maps = new HashMap<LevelManager.Level, String>();
-        maps.put(LevelManager.Level.LEVEL_1, "map_1.tmx");
-        maps.put(LevelManager.Level.LEVEL_2, "map_2.tmx");
-        maps.put(LevelManager.Level.LEVEL_3, "map_3.tmx");
+        this.levelManager = new MLevelManager();
+        HashMap<MLevelManager.Level, String> maps = new HashMap<MLevelManager.Level, String>();
+        maps.put(MLevelManager.Level.LEVEL_1, "map_1.tmx");
+        maps.put(MLevelManager.Level.LEVEL_2, "map_2.tmx");
+        maps.put(MLevelManager.Level.LEVEL_3, "map_3.tmx");
         this.levelManager.setLevels(maps);
 
         this.isRunning = false;
@@ -25,10 +25,10 @@ public class MGame extends Observable implements Runnable {
     }
 
     public boolean initialization() {
-        return this.levelManager.load(LevelManager.Level.LEVEL_3);
+        return this.levelManager.load(MLevelManager.Level.LEVEL_3);
     }
 
-    public Map getMap() {
+    public MMap getMap() {
         return this.levelManager.getMap();
     }
 

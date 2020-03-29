@@ -2,11 +2,10 @@ package sample.view;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import sample.model.MGame;
-import sample.model.Map;
+import sample.model.MMap;
 import sample.model.entities.BasicEntity;
 import sample.view.structure.CWritableImage;
 import sample.view.structure.ImageManager;
@@ -19,7 +18,7 @@ import java.util.Observer;
 
 public class GameVC extends GridPane implements Observer {
     private MGame game;
-    private Map map;
+    private MMap map;
     private ImageManager entitiesImage = new ImageManager();
 
     private StackPane stackPane = new StackPane();
