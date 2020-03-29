@@ -7,18 +7,18 @@ import sample.entityManager.objects.PacGum;
 import sample.entityManager.objects.SuperPacGum;
 import sample.entityManager.physicalEntities.PhysicalEntity;
 import sample.entityManager.physicalEntities.Wall;
-import sample.map.MapTemp;
+import sample.map.Map;
 import sample.map.Tile;
 
 import java.util.ArrayList;
 
 public class EntityManager {
 
-    private MapTemp map;
+    private Map map;
     private ArrayList<Entity> entities = new ArrayList<>();
     private ArrayList<Entity> entitiesToDelete = new ArrayList<>();
 
-    public EntityManager(MapTemp map) {
+    public EntityManager(Map map) {
         this.map = map;
     }
 
