@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapTemp {
+public class Map {
 
     private Tile[][] tiles;
     private HashMap<Entity, Tile> entitiesPosition = new HashMap<>();
@@ -19,7 +19,7 @@ public class MapTemp {
     private int height;
     private EntityManager entityManager= new EntityManager(this);
 
-    public MapTemp(int width, int height) {
+    public Map(int width, int height) {
 
         this.tiles = new Tile[width][height];
         this.width = width;
