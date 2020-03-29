@@ -79,6 +79,7 @@ public class GameVC extends GridPane implements Observer {
     private void fillGrid() {
         for(int i = 0; i < this.layers.size(); i++) {
             for (HashMap.Entry<Point, ImageView> entry : this.layers.get(i).entrySet()) {
+                //Permet de récupérer une entitée à un point dans un layer d'indice i
                 BasicEntity e = this.map.getEntityByPosition(entry.getKey(), i);
                 if(e != null) {
                     CWritableImage frontImg = (CWritableImage)entry.getValue().getImage();
