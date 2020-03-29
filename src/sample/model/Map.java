@@ -1,5 +1,6 @@
 package sample.model;
 
+import javafx.util.Pair;
 import sample.model.entities.BasicEntity;
 import sample.parser.Layers;
 import sample.parser.Tile;
@@ -8,9 +9,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class Map {
-    enum DIRECTION {
+    public enum DIRECTION {
         UP,
         DOWN,
         LEFT,
@@ -22,13 +24,24 @@ public class Map {
     private int nbLayer;
     private Layers layers;
     private ArrayList<HashMap<Point, BasicEntity>> entityMaps;
+    private Stack<DIRECTION> stackInput;
 
     public Point getSize() { return this.size; }
     public Point getTilesize() { return this.tilesize; }
     public int getNbLayer() { return this.nbLayer; }
 
+    public ArrayList<HashMap<Point, BasicEntity>> getLayers() { return this.entityMaps; }
+
     public Map() {
         this.entityMaps = new ArrayList<>();
+        this.stackInput = new Stack<>();
+    }
+
+    public BasicEntity getEntityByPosition(Point point, int idLayer) {
+        if(idLayer < this.entityMaps.size()) {
+            return this.entityMaps.get(idLayer).get(point);
+        }
+        return null;
     }
 
     public ArrayList<BasicEntity> getEntitiesByPosition(Point point) {
@@ -40,6 +53,43 @@ public class Map {
             }
         }
         return e;
+    }
+
+    public void pushInput(DIRECTION key) {
+        if(this.stackInput.isEmpty() || (!this.stackInput.peek().equals(key) && this.stackInput.size() < 10)) {
+            this.stackInput.push(key);
+            System.out.println(stackInput);
+        }
+
+        ArrayList<Pair<Pair<Point, Point>, BasicEntity>> entitiesToMove = new ArrayList<>();
+        for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
+            for (HashMap.Entry<Point, BasicEntity> entry : hashMap.entrySet()) {
+                if(entry.getValue().getTile().getType().equals("WALL")) {
+                    Point p = new Point(0, 0);
+                    if(key == DIRECTION.UP) {
+                        p.y -= 1;
+                    }
+                    else if(key == DIRECTION.DOWN) {
+                        p.y += 1;
+                    }
+                    else if(key == DIRECTION.LEFT) {
+                        p.x -= 1;
+                    }
+                    else if(key == DIRECTION.RIGHT) {
+                        p.x += 1;
+                    }
+                    Point p1 = entry.getKey();
+                    Point p2 = new Point(entry.getKey().x + p.x,entry.getKey().y + p.y);
+                    BasicEntity entity = entry.getValue();
+
+                    entitiesToMove.add(new Pair<>(new Pair<>(p1, p2), entity));
+                }
+            }
+            for(Pair<Pair<Point, Point>, BasicEntity> e : entitiesToMove) {
+                hashMap.put(e.getKey().getValue(), e.getValue());
+                hashMap.remove(e.getKey().getKey());
+            }
+        }
     }
 
     public boolean moveEntity(String entityType) {

@@ -5,11 +5,11 @@ import javafx.scene.image.WritableImage;
 import java.awt.*;
 import java.util.HashMap;
 
-public class ImageTemplate {
-    private HashMap<Integer, WritableImage> entitiesImage = new HashMap<Integer, WritableImage>();
-    private HashMap<String, Image> images = new HashMap<String, Image>();
+public class ImageManager {
+    private HashMap<Integer, CWritableImage> entitiesImage = new HashMap<>();
+    private HashMap<String, Image> images = new HashMap<>();
 
-    public WritableImage getImageOf(int entityId) {
+    public CWritableImage getImageOf(int entityId) {
         return this.entitiesImage.get(entityId);
     }
 
@@ -18,7 +18,7 @@ public class ImageTemplate {
         return this.images.get(imageSource);
     }
 
-    public boolean add(int entityId, String imageSource, Point coordTexture, Point tilesize) {
+    public boolean add(int gid, String imageSource, Point coordTexture, Point tilesize) {
         Image img = this.getImage(imageSource);
 
         if(!img.isError()) {
@@ -28,7 +28,7 @@ public class ImageTemplate {
             int y = coordTexture.y * tilesize.y;
 
             try {
-                this.entitiesImage.put(entityId, new WritableImage(this.images.get(imageSource).getPixelReader(), x, y, tilesize.x, tilesize.y));
+                this.entitiesImage.put(gid, new CWritableImage(gid, this.images.get(imageSource).getPixelReader(), x, y, tilesize.x, tilesize.y));
                 return true;
             }
             catch (final IndexOutOfBoundsException e) {
