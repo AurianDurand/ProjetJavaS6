@@ -75,25 +75,6 @@ public class GameVC extends GridPane implements Observer {
             }
             this.stackPane.getChildren().add(grid);
         }
-
-//        for(int i = 0; i < this.map.getNbLayer(); i++) {
-//            GridPane grid = new GridPane();
-//
-//            for(int l = 0; l < this.map.getSize().y; l++) {
-//                for(int m = 0; m < this.map.getSize().x; m++) {
-//                    this.imagesView.computeIfAbsent(new Point(m, l), k -> new ArrayList<ImageView>());
-//                    ImageView imgView = new ImageView();
-//                    imgView.setFitWidth(this.map.getTilesize().x);
-//                    imgView.setFitHeight(this.map.getTilesize().y);
-//                    imgView.setPreserveRatio(true);
-//                    this.imagesView.get(new Point(m, l)).add(imgView);
-//                    grid.add(imgView, m, l);
-//                }
-//            }
-//            grid.requestFocus();
-//            grid.setAlignment(Pos.CENTER);
-//            this.stackPane.getChildren().add(grid);
-//        }
     }
 
     private void fillGrid() {
@@ -111,43 +92,12 @@ public class GameVC extends GridPane implements Observer {
                     if(frontEntityId != backEntityId) {
                         this.layers.get(i).get(entry.getKey()).setImage(this.entitiesImage.getImageOf(backEntityId));
                     }
-
-//                    int nextEntityId = e.getTile().getGid();
-//                    CWritableImage currentEntityImg = (CWritableImage)entry.getValue().getImage();
-//                    WritableImage nextEntityImg = this.entitiesImage.getImageOf(nextEntityId);
-//                    if((currentEntityImg == null && nextEntityImg != null) || (currentEntityImg != null && !currentEntityImg.equals(nextEntityImg))) {
-//                        this.layers.get(i).get(entry.getKey()).setImage(nextEntityImg);
-//                    }
                 }
                 else {
                     this.layers.get(i).get(entry.getKey()).setImage(null);
                 }
             }
         }
-
-//        for(int i = 0; i < this.map.getSize().y; i++) {
-//            for (int j = 0; j < this.map.getSize().x; j++) {
-//                ArrayList<BasicEntity> entities = this.map.getEntitiesByPosition(new Point(j, i));
-//                if(entities != null) {
-//                    for(int k = 0; k < entities.size(); k++) {
-//
-//                        try {
-//                            WritableImage nextEntityImg = this.entitiesImage.getImageOf(entities.get(k).getId());
-//                            WritableImage currentEntityImg = (WritableImage)this.imagesView.get(new Point(j, i)).get(k).getImage();
-//                            if(!nextEntityImg.equals(currentEntityImg)) {
-//                                this.imagesView.get(new Point(j, i)).get(k).setImage(this.entitiesImage.getImageOf(entities.get(k).getId()));
-//                            }
-//                        }
-//                        catch (IndexOutOfBoundsException e){
-//                            System.out.println("tetetetetet");
-//                        }
-//                        catch (NullPointerException e){
-//                            System.out.println("tetetetetet");
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 
     @Override

@@ -64,7 +64,7 @@ public class Map {
         ArrayList<Pair<Pair<Point, Point>, BasicEntity>> entitiesToMove = new ArrayList<>();
         for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
             for (HashMap.Entry<Point, BasicEntity> entry : hashMap.entrySet()) {
-                if(entry.getValue().getTile().getType().equals("PACMAN")) {
+                if(entry.getValue().getTile().getType().equals("WALL")) {
                     Point p = new Point(0, 0);
                     if(key == DIRECTION.UP) {
                         p.y -= 1;
