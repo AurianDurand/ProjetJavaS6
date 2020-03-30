@@ -3,7 +3,7 @@ package sample.entityManager.dynamicEntities;
 import sample.entityManager.Entity;
 import sample.map.Tile;
 
-public class DynamicEntity implements Entity {
+public class DynamicEntity extends Entity {
 
     private String assetPath;
     private Direction buffer = Direction.RIGHT;

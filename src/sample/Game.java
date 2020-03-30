@@ -3,14 +3,20 @@ package sample;
 import sample.entityManager.Entity;
 import sample.entityManager.dynamicEntities.DynamicEntity;
 import sample.map.Tile;
+import sample.model.MGame;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Game {
+public class Game extends Observable implements Runnable {
 
     private LevelManager levelManager;
+    private Thread th;
+    private boolean isRunning;
 
     // each level name is associated with a map name
     private HashMap<String,String> level_map = new HashMap<>();
@@ -87,7 +93,32 @@ public class Game {
         System.out.println();
     }
 
-    public void quitGame() {
+    @Override
+    public void run() {
+        while(isRunning) {
+            this.levelManager.update();
 
+            setChanged();
+            notifyObservers(); // notification de l'observer
+
+            try {
+                Thread.sleep(30); // pause
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    public void start() {
+        System.out.println("Game started");
+        this.th.start();
+        this.isRunning = true;
+    }
+
+    public void stop() {
+        System.out.println("Game stoped");
+        this.th.stop();
+        this.isRunning = false;
     }
 }

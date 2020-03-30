@@ -5,19 +5,29 @@ import sample.entityManager.EntityManager;
 import sample.entityManager.EntityType;
 
 import sample.entityManager.dynamicEntities.DynamicEntity;
+import sample.model.entities.BasicEntity;
 import sample.parser.Layers;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Map {
 
+    // for the model
     private Tile[][] tiles;
     private HashMap<Entity, Tile> entitiesPosition = new HashMap<>();
     private int width;
     private int height;
     private EntityManager entityManager= new EntityManager(this);
+
+    // for the view
+    private Point size;
+    private Point tilesize;
+    private int nbLayer;
+    private Layers layers;
+    private ArrayList<HashMap<Point, Entity>> entityMaps = new ArrayList<>();
 
     public Map(int width, int height) {
 
@@ -47,8 +57,19 @@ public class Map {
 
         if(layers != null){
 
+            // for the view
+            this.layers = cLayers;
+            this.size = new Point(cLayers.getWidth(), cLayers.getHeight());
+            this.tilesize = new Point(cLayers.getTilewidth(), cLayers.getTileheight());
+            this.nbLayer = layers.size();
+            this.entityMaps.clear();
+
             // for each layer
+            int layerIndex = 0;
             for(sample.parser.Tile[][] layer : layers){
+
+                // initialise the layer to rebuild for the view
+                this.entityMaps.add(new HashMap<Point, Entity>());
 
                 // for each tile
                 for(int i = 0; i < layer.length; i++){
@@ -71,21 +92,27 @@ public class Map {
                                     case "PACMAN":
 
                                         // i and j are inverted because for the parser, j = lines = x and i = columns = y
-                                        this.createEntity(EntityType.PACMAN, j, i, layer[i][j].getSource());
+                                        this.createEntity(EntityType.PACMAN, j, i, layer[i][j].getSource(), layerIndex);
                                         break;
                                     case "GHOST":
-                                        this.createEntity(EntityType.GHOST, j, i, layer[i][j].getSource());
+                                        this.createEntity(EntityType.GHOST, j, i, layer[i][j].getSource(), layerIndex);
                                         break;
                                     case "PACGUM":
-                                        this.createEntity(EntityType.PACGUM, j, i, layer[i][j].getSource());
+                                        this.createEntity(EntityType.PACGUM, j, i, layer[i][j].getSource(), layerIndex);
                                         break;
                                     case "SUPERPACGUM":
-                                        this.createEntity(EntityType.SUPERPACGUM, j, i, layer[i][j].getSource());
+                                        this.createEntity(EntityType.SUPERPACGUM, j, i, layer[i][j].getSource(), layerIndex);
                                         break;
                                     case "WALL":
-                                        this.createEntity(EntityType.WALL, j, i, layer[i][j].getSource());
+                                        this.createEntity(EntityType.WALL, j, i, layer[i][j].getSource(), layerIndex);
                                         break;
                                 }
+
+//                                if(this.tiles[j][i].getEntities().size() >= 1) {
+//
+////                                    System.out.println(j+","+i+": "+this.tiles[j][i].getEntities().get(this.tiles[j][i].getEntities().size()-1));
+//                                    this.entityMaps.get(layerIndex).put(new Point(j,i), this.tiles[j][i].getEntities().get(this.tiles[j][i].getEntities().size()-1));
+//                                }
                             }
 
                         }
@@ -99,6 +126,7 @@ public class Map {
 //                    System.out.println("");
                 }
 //                System.out.println("");
+                layerIndex ++;
             }
         }
 
@@ -222,9 +250,12 @@ public class Map {
 
         // add the entity into the new tile
         this.tiles[x][y].addEntity(entity);
+
+        // fourth, move the entity in the entityMaps for the view
+        // ...
     }
 
-    public void createEntity(EntityType entityType, int x, int y, String assetPath) {
+    public void createEntity(EntityType entityType, int x, int y, String assetPath, int layerIndex) {
 
         // first, ask the entityManager to create the entity
         Entity createdEntity = this.entityManager.createEntity(entityType,x,y,assetPath);
@@ -234,6 +265,11 @@ public class Map {
 
         // third, add the entity to the tile
         this.tiles[x][y].addEntity(createdEntity);
+
+        // fourth, add the entity to the entityMaps for the view
+        if(this.tiles[x][y].getEntities().size() >= 1) {
+            this.entityMaps.get(layerIndex).put(new Point(x,y), this.tiles[x][y].getEntities().get(this.tiles[x][y].getEntities().size()-1));
+        }
     }
 
     public void destroyEntity(Entity entity) {
@@ -246,6 +282,9 @@ public class Map {
 
         // third, destroy the entity
         this.entityManager.destroyEntity(entity);
+
+        // fourth, destroy the entity from the entityMaps (for the view)
+        // ... 
     }
 
     public HashMap<Entity, Tile> getEntitiesPosition() {

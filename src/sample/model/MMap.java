@@ -92,29 +92,6 @@ public class MMap {
         }
     }
 
-    public boolean moveEntity(String entityType) {
-//        for (HashMap.Entry<Point, ArrayList<BasicEntity>> entry : mEntities.entrySet()) {
-//            ArrayList<BasicEntity> myListOfEntity = entry.getValue();
-//            for(BasicEntity e : myListOfEntity) {
-//                if(e.getTile().getType().equals(entityType)) {
-//                    System.out.println(entry.getKey());
-//
-//                    Point currentPos = entry.getKey();
-//                    Point nextPos = new Point(currentPos.x, currentPos.y - 1);
-//                    myListOfEntity.remove(e);
-//                    this.addEntity(nextPos, e);
-//
-//                    System.out.println(nextPos);
-//                    return true;
-//                }
-//            }
-//        }
-
-
-        return false;
-    }
-
-
     private void addEntity(int idLayer, Point pos, BasicEntity entity) {
         if(idLayer < this.entityMaps.size()) {
             this.entityMaps.get(idLayer).put(pos, entity);
@@ -130,7 +107,6 @@ public class MMap {
                 this.size = new Point(data.getWidth(), data.getHeight());
                 this.tilesize = new Point(data.getTilewidth(), data.getTileheight());
                 this.nbLayer = layers.size();
-
                 this.entityMaps.clear();
 
                 //On parcourt chaque layer
@@ -156,35 +132,4 @@ public class MMap {
         return false;
     }
 
-    public void display() {
-        //On test si le parser n'a pas d'erreur
-        if(this.layers != null) {
-            List<Tile[][]> layers = this.layers.getLayers();
-            if(layers != null){
-                System.out.println("<--------------------------------------------------------------->");
-                //On parcourt chaque layer
-                for(Tile[][] layer : layers){
-                    //On parcourt chaque case
-                    for (int i = 0; i < layer.length; i++) {
-                        for (int j = 0; j < layer[i].length; j++) {
-                            if (layer[i][j] != null) {
-                                //la case est pleine
-                                System.out.print(layer[i][j].getGid());//getter -> Source, taille, posTexture, type
-                            } else {
-                                //la case est vide
-                                System.out.print("0");
-                            }
-                            System.out.print(", ");
-                        }
-                        System.out.println("");
-                    }
-                    System.out.println("");
-                }
-
-                System.out.println("Map de taille : " + this.layers.getWidth() + " : " + this.layers.getHeight());
-                System.out.println("Tile de taille : " + this.layers.getTilewidth() + " : " + this.layers.getTileheight());
-                System.out.println("<--------------------------------------------------------------->");
-            }
-        }
-    }
 }
