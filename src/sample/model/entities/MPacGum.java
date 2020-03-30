@@ -7,13 +7,17 @@ public class MPacGum extends MPhysicEntity {
 
     public int getPointValue() { return this.pointsValue; }
 
-    public MPacGum(Tile tile, int pointsValue) {
-        super(tile);
+    public MPacGum(Tile tile, ENTITY_TYPE type, int pointsValue) {
+        super(tile, type);
         this.pointsValue = pointsValue;
     }
 
     @Override
-    public boolean onCollide(MPhysicEntity entity) {
-        return false;
+    public void onSensorCollide(MPhysicEntity entity) {
+    }
+
+    @Override
+    public void onPhysicCollide(MPhysicEntity entity) {
+
     }
 }

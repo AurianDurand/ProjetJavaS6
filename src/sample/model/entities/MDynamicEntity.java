@@ -4,14 +4,36 @@ import sample.model.MMap;
 import sample.parser.Tile;
 
 public abstract class MDynamicEntity extends MPhysicEntity {
-    MMap.DIRECTION currentDirection;
+    protected MMap.DIRECTION currentDirection;
+    private boolean canMove;
+    private long movingClock;
+    protected long timeToMove;
 
     public MMap.DIRECTION getCurrentDirection() { return this.currentDirection; }
 
-    public MDynamicEntity(Tile tile) {
-        super(tile);
-        this.currentDirection = MMap.DIRECTION.IDLE;
+    public boolean getCanMove() { return this.canMove; }
+
+    public void setDirection(MMap.DIRECTION direction) {
+        this.currentDirection = direction;
     }
 
-    public abstract void onUpdate(long deltaTime);
+    public MDynamicEntity(Tile tile, ENTITY_TYPE type) {
+        super(tile, type);
+        this.currentDirection = MMap.DIRECTION.IDLE;
+        this.canMove = false;
+        this.movingClock = 0;
+        this.timeToMove = 300;
+    }
+
+    public void onUpdate(long deltaTime) {
+        this.movingClock += deltaTime;
+        if(this.movingClock > this.timeToMove) {
+            this.movingClock -= this.timeToMove;
+            this.canMove = true;
+        }
+    }
+
+    public void onMove() {
+        this.canMove = false;
+    }
 }

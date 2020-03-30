@@ -113,12 +113,16 @@ public class GameVC extends GridPane implements Observer {
     }
 
     private void updateGUI() {
-        this.label.setText(Integer.toString(this.map.getScore(0)));
+        Platform.runLater(new Runnable() {
+            public void run() {
+                label.setText("Score : " + game.getMap().getScore(0));
+            }
+        });
     }
 
     @Override
     public void update(Observable o, Object arg) {
         this.fillGrid();
-//        this.updateGUI();
+        this.updateGUI();
     }
 }

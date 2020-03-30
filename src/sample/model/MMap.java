@@ -22,6 +22,8 @@ public class MMap {
     private Point size;
     private Point tilesize;
     private ArrayList<HashMap<Point, MBasicEntity>> layers;
+    private ArrayList<MPacman> players;
+    private Layers rawlayers;
 
     public Point getSize() { return this.size; }
 
@@ -30,12 +32,8 @@ public class MMap {
     public int getNbLayer() { return this.layers.size(); }
 
     public int getScore(int idPlayer) {
-        ArrayList<MBasicEntity> entities = this.getEntitiesByType("PACMAN");
-        if(entities.size() > 0 && idPlayer < entities.size()) {
-            if(entities.get(idPlayer) instanceof MPacman) {
-                MPacman player = (MPacman) entities.get(idPlayer);
-                return player.getScore();
-            }
+        if(this.players.size() > 0 && idPlayer < this.players.size()) {
+            return this.players.get(idPlayer).getScore();
         }
 
         return 0;
@@ -43,19 +41,21 @@ public class MMap {
 
     public MMap() {
         this.layers = new ArrayList<>();
+        this.players = new ArrayList<>();
     }
 
-    private long clockMove = 0;
-
     public void update(long deltaTime) {
-        clockMove += deltaTime;
-        if(clockMove < 200) {
-            return;
-        }
-        clockMove -= 200;
-
+        this.updateInfoMap();
         this.deleteDeadEntities();
         this.updateEntities(deltaTime);
+    }
+
+    private void updateInfoMap() {
+        if(this.getEntitiesByType(MBasicEntity.ENTITY_TYPE.PACMAN).size() <= 0) {
+            if(this.rawlayers != null) {
+                this.create(this.rawlayers);
+            }
+        }
     }
 
     private void deleteDeadEntities() {
@@ -73,71 +73,78 @@ public class MMap {
     }
 
     private void updateEntities(long deltaTime) {
-        ArrayList<Pair<Pair<Point, Point>, MBasicEntity>> entitiesToMove = new ArrayList<>();
-
         for(HashMap<Point, MBasicEntity> layer : this.layers) {
-            for (HashMap.Entry<Point, MBasicEntity> entry : layer.entrySet()) {
-                if (entry.getValue() instanceof MDynamicEntity) {
-                    MDynamicEntity entity = (MDynamicEntity) entry.getValue();
-                    entity.onUpdate(deltaTime);
+            List<Point> keyList = new ArrayList<>(layer.keySet());
+            for(int i = 0; i < keyList.size(); i++) {
+                Point key = keyList.get(i);
+                MBasicEntity entity = layer.get(key);
 
-                    DIRECTION key = entity.getCurrentDirection();
-                    if(key != DIRECTION.IDLE) {
+                if(entity instanceof MDynamicEntity) {
+                    MDynamicEntity dynamicEntity = (MDynamicEntity) entity;
+                    dynamicEntity.onUpdate(deltaTime);
+
+                    DIRECTION direction = dynamicEntity.getCurrentDirection();
+                    if(direction != DIRECTION.IDLE && dynamicEntity.getCanMove()) {
                         Point p = new Point(0, 0);
-                        if(key == DIRECTION.UP) {
+                        if(direction == DIRECTION.UP) {
                             p.y -= 1;
-                            entity.getTile().setRotation(0.0);
                         }
-                        else if(key == DIRECTION.DOWN) {
+                        else if(direction == DIRECTION.DOWN) {
                             p.y += 1;
-                            entity.getTile().setRotation(180.0);
                         }
-                        else if(key == DIRECTION.LEFT) {
+                        else if(direction == DIRECTION.LEFT) {
                             p.x -= 1;
-                            entity.getTile().setRotation(270.0);
                         }
-                        else if(key == DIRECTION.RIGHT) {
+                        else if(direction == DIRECTION.RIGHT) {
                             p.x += 1;
-                            entity.getTile().setRotation(90.0);
                         }
-                        Point p1 = entry.getKey();
-                        Point p2 = new Point(entry.getKey().x + p.x,entry.getKey().y + p.y);
+                        Point currentPosition = key;
+                        Point nextPosition = new Point(key.x + p.x,key.y + p.y);
 
-                        if(this.canMoveTo(entity, p2)) {
-                            entitiesToMove.add(new Pair<>(new Pair<>(p1, p2), entity));
+                        if(this.physicCollideEnvent(dynamicEntity, nextPosition)) {
+                            this.sensorCollideEvent(dynamicEntity, nextPosition);
+                            if(dynamicEntity.getIsAlive()){
+                                dynamicEntity.onMove();
+                                layer.put(nextPosition, dynamicEntity);
+                            }
+
+                            layer.remove(currentPosition);
                         }
                     }
                 }
             }
-
-            for(Pair<Pair<Point, Point>, MBasicEntity> e : entitiesToMove) {
-                layer.put(e.getKey().getValue(), e.getValue());
-                layer.remove(e.getKey().getKey());
-            }
         }
     }
 
-    private boolean canMoveTo(MDynamicEntity entityToMove, Point pointTargeted) {
-
+    private boolean physicCollideEnvent(MDynamicEntity entityToMove, Point pointTargeted) {
         ArrayList<MBasicEntity> entities = this.getEntitiesByPosition(pointTargeted);
-
         for(MBasicEntity entity : entities) {
-            if(entity instanceof MPhysicEntity) {
-                MPhysicEntity pOther = (MPhysicEntity) entity;
-
-                return entityToMove.onCollide(pOther);
+            if(entityToMove.containCollision(entity.getType(), false)) {
+                MPhysicEntity physicEntity = (MPhysicEntity) entity;
+                entityToMove.onPhysicCollide(physicEntity);
+                return false;
             }
         }
 
         return true;
     }
 
+    private void sensorCollideEvent(MDynamicEntity entityMoved, Point newPosition) {
+        ArrayList<MBasicEntity> entities = this.getEntitiesByPosition(newPosition);
+        for(MBasicEntity entity : entities) {
+            if(entityMoved.containCollision(entity.getType(), true)) {
+                MPhysicEntity physicEntity  = (MPhysicEntity) entity;
+                entityMoved.onSensorCollide(physicEntity);
+            }
+        }
+    }
+
     public void setPlayerDirection(DIRECTION input) {
-        ArrayList<MBasicEntity> entities = this.getEntitiesByType("PACMAN");
+        ArrayList<MBasicEntity> entities = this.getEntitiesByType(MBasicEntity.ENTITY_TYPE.PACMAN);
 
         for(MBasicEntity entity : entities) {
-            if(entity instanceof MPacman) {
-                MPacman p = (MPacman) entity;
+            if(entity instanceof MDynamicEntity) {
+                MDynamicEntity p = (MDynamicEntity) entity;
                 p.setDirection(input);
             }
         }
@@ -150,12 +157,12 @@ public class MMap {
         return null;
     }
 
-    public ArrayList<MBasicEntity> getEntitiesByType(String type) {
+    public ArrayList<MBasicEntity> getEntitiesByType(MBasicEntity.ENTITY_TYPE type) {
         ArrayList<MBasicEntity> entities = new ArrayList<>();
 
         for(HashMap<Point, MBasicEntity> hashMap : this.layers) {
             for (HashMap.Entry<Point, MBasicEntity> entry : hashMap.entrySet()) {
-                if (entry.getValue().getTile().getType().equals(type)) {
+                if (entry.getValue().getType().equals(type)) {
                     entities.add(entry.getValue());
                 }
             }
@@ -183,7 +190,7 @@ public class MMap {
                 this.size = new Point(data.getWidth(), data.getHeight());
                 this.tilesize = new Point(data.getTilewidth(), data.getTileheight());
                 this.layers.clear();
-
+                this.rawlayers = data;
                 //On parcourt chaque layer
                 for(int k = 0; k < layers.size(); k++) {
                     Tile[][] layer = layers.get(k);
@@ -199,10 +206,24 @@ public class MMap {
                         }
                     }
                 }
+
+                this.initPlayers();
                 return true;
             }
         }
         return false;
+    }
+
+    private void initPlayers() {
+        this.players.clear();
+
+        ArrayList<MBasicEntity> entities = this.getEntitiesByType(MBasicEntity.ENTITY_TYPE.PACMAN);
+        for(MBasicEntity e : entities) {
+            if(e instanceof MPacman) {
+                MPacman player = (MPacman) e;
+                this.players.add(player);
+            }
+        }
     }
 
     private void addEntity(int idLayer, Point pos, MBasicEntity entity) {
