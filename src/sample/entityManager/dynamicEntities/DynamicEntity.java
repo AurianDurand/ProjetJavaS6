@@ -6,7 +6,7 @@ import sample.map.Tile;
 public class DynamicEntity extends Entity {
 
     private String assetPath;
-    private Direction buffer = Direction.RIGHT;
+    private Direction buffer = Direction.IDLE;
 
     public DynamicEntity(String assetPath) {
         this.assetPath = assetPath;

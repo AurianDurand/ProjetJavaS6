@@ -4,6 +4,7 @@ import sample.entityManager.Entity;
 import sample.entityManager.EntityManager;
 import sample.entityManager.EntityType;
 
+import sample.entityManager.dynamicEntities.Direction;
 import sample.entityManager.dynamicEntities.DynamicEntity;
 import sample.model.entities.BasicEntity;
 import sample.parser.Layers;
@@ -148,6 +149,9 @@ public class Map {
         return this.tiles[x][y].getEntities();
     }
 
+    /**
+     * this method will ask every dynamic entity to move (if it's possible)
+     */
     public void moveAllDynamicEntities() {
 
         // search the dynamic entities
@@ -159,6 +163,7 @@ public class Map {
 
                 System.out.println("Move:");
                 System.out.println("  " + entity + ": " + this.entitiesPosition.get(entity) +" / " + currentX + "," + currentY);
+                System.out.println("  direction: " + ((DynamicEntity) entity).getBuffer());
 
                 ArrayList<Entity> entitiesOnTileToMOveOn;
                 boolean canTheEntityMove;
@@ -228,19 +233,22 @@ public class Map {
                             this.setEntityToNewTile(entity,currentX+1,currentY);
                         }
                         break;
+                    case IDLE:
+                        ((DynamicEntity) entity).setBuffer(Direction.getRandomDirection());
+                        break;
                 }
             }
         }
     }
 
     /**
-     * this method verify if the tile to move on exists and if so,
+     * this method verifies if the tile to move on exists and if so,
      * move the entity
      * @param entity,x,y the entity to move and the new coordinates
      */
     private void setEntityToNewTile(Entity entity, int x, int y) {
 
-        System.out.println("  to " + x + "," + y);
+        System.out.println("  has moved to " + x + "," + y);
 
         // remove the entity from the current tile
         this.entitiesPosition.get(entity).removeEntity(entity);
@@ -252,9 +260,24 @@ public class Map {
         this.tiles[x][y].addEntity(entity);
 
         // fourth, move the entity in the entityMaps for the view
-        // ...
+        for (HashMap<Point,Entity> layer: this.entityMaps) {
+            if(layer.containsKey(new Point(x,y))) {
+                if(layer.get(new Point(x,y)) == entity) {
+                    layer.remove(new Point(x,y));
+                    layer.put(new Point(x,y),entity);
+                }
+            }
+        }
     }
 
+    /**
+     * this method creates the entity and add it to every variable which may need it
+     * @param entityType
+     * @param x
+     * @param y
+     * @param assetPath
+     * @param layerIndex
+     */
     public void createEntity(EntityType entityType, int x, int y, String assetPath, int layerIndex) {
 
         // first, ask the entityManager to create the entity
@@ -272,6 +295,10 @@ public class Map {
         }
     }
 
+    /**
+     * this method deletes the given entity in every variable where it is stored
+     * @param entity
+     */
     public void destroyEntity(Entity entity) {
 
         // first, remove the entity from the tile
@@ -284,7 +311,16 @@ public class Map {
         this.entityManager.destroyEntity(entity);
 
         // fourth, destroy the entity from the entityMaps (for the view)
-        // ... 
+        // ...
+        for (HashMap<Point,Entity> layer: this.entityMaps) {
+            if(layer.containsValue(entity)) {
+                layer.forEach((k,v) -> {
+                    if(v == entity) {
+                        layer.remove(k);
+                    }
+                });
+            }
+        }
     }
 
     public HashMap<Entity, Tile> getEntitiesPosition() {

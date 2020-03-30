@@ -18,42 +18,39 @@ public class Game extends Observable implements Runnable {
     private Thread th;
     private boolean isRunning;
 
-    // each level name is associated with a map name
-    private HashMap<String,String> level_map = new HashMap<>();
-
-    // each map name is associated with a path
-    private HashMap<String,String> map_path = new HashMap<>();
+    // each level name is associated with a map path
+    private HashMap<String,String> level_mapPath = new HashMap<>();
 
     public Game() {
 
         // the game levels
-        this.level_map.put("Level 1","Map 1");
-        this.level_map.put("Level 2","Map 2");
+        this.level_mapPath.put("Level 1","map_3.tmx");
+        this.level_mapPath.put("Level 2","Map 2");
 
-        // the maps paths
-        this.map_path.put("Map 1","Path 1");
-        this.map_path.put("Map 2","Path 2");
+        this.isRunning = false;
+        this.th = new Thread(this);
+        this.th.setDaemon(true);
     }
 
-    public void startLevel() {
-        this.levelManager = new LevelManager(this.map_path.get(this.level_map.get("Level 1")));
+    public void loadLevel(String levelName) {
+        this.levelManager = new LevelManager(this.level_mapPath.get(levelName));
 
 //        System.out.println(this.levelManager.getEntitiesPosition());
 
-        try
-        {
-            Thread.sleep(1000);
-        }
-        catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
-        }
+//        try
+//        {
+//            Thread.sleep(1000);
+//        }
+//        catch(InterruptedException ex)
+//        {
+//            Thread.currentThread().interrupt();
+//        }
 
-        show(this.levelManager.getEntitiesPosition());
+//        show(this.levelManager.getEntitiesPosition());
 
-        this.levelManager.moveAllDynamicEntities();
+//        this.levelManager.moveAllDynamicEntities();
 
-        show(this.levelManager.getEntitiesPosition());
+//        show(this.levelManager.getEntitiesPosition());
 
 //        try
 //        {
@@ -96,16 +93,17 @@ public class Game extends Observable implements Runnable {
     @Override
     public void run() {
         while(isRunning) {
-            this.levelManager.update();
+
+            this.levelManager.moveAllDynamicEntities();
 
             setChanged();
             notifyObservers(); // notification de l'observer
 
-            try {
-                Thread.sleep(30); // pause
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MGame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            Thread.sleep(1000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
 
         }
     }

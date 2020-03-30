@@ -61,7 +61,7 @@ public class LevelManager {
         TMXParser parser = new TMXParser();
 
         // call its parse method
-        Layers cLayers = parser.Parse("src/res/maps/", "map_3.tmx");
+        Layers cLayers = parser.Parse("src/res/maps/", this.mapPath);
 
         // return the parse output
         return cLayers;

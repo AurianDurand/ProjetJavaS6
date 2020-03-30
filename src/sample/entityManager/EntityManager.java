@@ -1,5 +1,6 @@
 package sample.entityManager;
 
+import sample.entityManager.dynamicEntities.Direction;
 import sample.entityManager.dynamicEntities.DynamicEntity;
 import sample.entityManager.dynamicEntities.Ghost;
 import sample.entityManager.dynamicEntities.Pacman;
@@ -70,21 +71,11 @@ public class EntityManager {
 
             // if the entity is a wall, return false
             if(entityOnTargetTile instanceof PhysicalEntity) {
+
+                // only for test
+                ((DynamicEntity)entityToMove).setBuffer(Direction.getRandomDirection());
+
                 return false; // return false and stop the method
-            }
-
-            // if the entity is an object, pick it up
-            else if (entityOnTargetTile instanceof Object) {
-
-                // an object can be picked up only by Pac-Man
-                if (entityToMove instanceof Pacman) {
-
-                    // add the entity to the destroy list to destroy the object instance
-                    entitiesToDelete.add(entityOnTargetTile);
-
-                    // increment the points obtained by the player
-                    ((Pacman) entityToMove).gainOnePoint();
-                }
             }
 
             // if the entity is another dynamic entity
@@ -99,12 +90,30 @@ public class EntityManager {
                         // Pac-Man lose one life
                         ((Pacman) entityToMove).loseOneLife();
 
+                        System.out.println("  has collided with a ghost -> - 1 life");
+
                         if(((Pacman) entityToMove).getLifes() == 0) {
 
                             // GAME OVER
                             this.entitiesToDelete.add(entityToMove); // delete Pac-Man because he has no life left
                         }
                     }
+                }
+            }
+
+            // if the entity is an object, pick it up
+            else if (entityOnTargetTile instanceof Object) {
+
+                // an object can be picked up only by Pac-Man
+                if (entityToMove instanceof Pacman) {
+
+                    // add the entity to the destroy list to destroy the object instance
+                    entitiesToDelete.add(entityOnTargetTile);
+
+                    System.out.println("  object picked up -> + 1p");
+
+                    // increment the points obtained by the player
+                    ((Pacman) entityToMove).gainOnePoint();
                 }
             }
         }

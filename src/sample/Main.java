@@ -30,8 +30,9 @@ public class Main extends Application {
 //        VTerminal vue = new VTerminal(modele);
 //        modele.addObserver(vue);
 //        new Thread(modele).start();
-//
-        Game game = new Game();
-        game.startLevel();
+
+//        Game game = new Game();
+//        game.loadLevel("Level 1");
+//        game.start();
     }
 }

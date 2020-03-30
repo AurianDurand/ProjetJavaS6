@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import sample.Game;
 import sample.model.MGame;
 import sample.model.MMap;
 import sample.view.GameVC;
@@ -16,6 +17,12 @@ import java.util.ArrayList;
 
 public class Home_controller {
     private  MGame game;
+
+    public Home_controller() {
+        Game game = new Game();
+        game.loadLevel("Level 1");
+        game.start();
+    }
 
     public void onPlayPressed(ActionEvent event) {
 //        try {

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.1" name="Objects" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+<tileset version="1.2" tiledversion="1.3.3" name="Objects" tilewidth="32" tileheight="32" tilecount="64" columns="8">
  <image source="../textures/entity_32x32.png" width="256" height="256"/>
  <tile id="0" type="PACMAN"/>
  <tile id="1" type="PACMAN"/>
  <tile id="2" type="PACMAN"/>
  <tile id="3" type="PACMAN"/>
- <tile id="4" type="PACGUM2"/>
- <tile id="5" type="PACGUM1"/>
- <tile id="6" type="PACGUM3"/>
+ <tile id="4" type="PACGUM"/>
+ <tile id="5" type="PACGUM"/>
+ <tile id="6" type="PACGUM"/>
  <tile id="8" type="PACMAN"/>
  <tile id="9" type="PACMAN"/>
  <tile id="10" type="PACMAN"/>
