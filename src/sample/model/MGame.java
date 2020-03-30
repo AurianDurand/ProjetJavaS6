@@ -10,6 +10,7 @@ public class MGame extends Observable implements Runnable {
     private MLevelManager levelManager;
     private Thread th;
     private boolean isRunning;
+    long deltaTime = 30;//ms
 
     public MGame() {
         this.levelManager = new MLevelManager();
@@ -35,17 +36,16 @@ public class MGame extends Observable implements Runnable {
     @Override
     public void run() {
         while(isRunning) {
-            this.levelManager.update();
+            this.levelManager.update(this.deltaTime);
 
             setChanged();
             notifyObservers(); // notification de l'observer
 
             try {
-                Thread.sleep(30); // pause
+                Thread.sleep(this.deltaTime); // pause
             } catch (InterruptedException ex) {
                 Logger.getLogger(MGame.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 

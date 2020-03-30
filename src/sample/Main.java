@@ -31,7 +31,8 @@ public class Main extends Application {
 //        modele.addObserver(vue);
 //        new Thread(modele).start();
 //
-        Game game = new Game();
-        game.startLevel();
+
+//        Game game = new Game();
+//        game.startLevel();
     }
 }

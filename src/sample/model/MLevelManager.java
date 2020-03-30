@@ -28,8 +28,8 @@ public class MLevelManager {
         return this.map;
     }
 
-    public void update() {
-
+    public void update(long deltaTime) {
+        this.map.update(deltaTime);
     }
 
     public boolean load(Level level) {

@@ -1,7 +1,7 @@
 package sample.model;
 
 import javafx.util.Pair;
-import sample.model.entities.BasicEntity;
+import sample.model.entities.*;
 import sample.parser.Layers;
 import sample.parser.Tile;
 
@@ -9,45 +9,165 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
 
 public class MMap {
     public enum DIRECTION {
         UP,
         DOWN,
         LEFT,
-        RIGHT
+        RIGHT,
+        IDLE
     }
 
     private Point size;
     private Point tilesize;
-    private int nbLayer;
-    private Layers layers;
-    private ArrayList<HashMap<Point, BasicEntity>> entityMaps;
-    private Stack<DIRECTION> stackInput;
+    private ArrayList<HashMap<Point, MBasicEntity>> layers;
 
     public Point getSize() { return this.size; }
+
     public Point getTilesize() { return this.tilesize; }
-    public int getNbLayer() { return this.nbLayer; }
 
-    public ArrayList<HashMap<Point, BasicEntity>> getLayers() { return this.entityMaps; }
+    public int getNbLayer() { return this.layers.size(); }
 
-    public MMap() {
-        this.entityMaps = new ArrayList<>();
-        this.stackInput = new Stack<>();
+    public int getScore(int idPlayer) {
+        ArrayList<MBasicEntity> entities = this.getEntitiesByType("PACMAN");
+        if(entities.size() > 0 && idPlayer < entities.size()) {
+            if(entities.get(idPlayer) instanceof MPacman) {
+                MPacman player = (MPacman) entities.get(idPlayer);
+                return player.getScore();
+            }
+        }
+
+        return 0;
     }
 
-    public BasicEntity getEntityByPosition(Point point, int idLayer) {
-        if(idLayer < this.entityMaps.size()) {
-            return this.entityMaps.get(idLayer).get(point);
+    public MMap() {
+        this.layers = new ArrayList<>();
+    }
+
+    private long clockMove = 0;
+
+    public void update(long deltaTime) {
+        clockMove += deltaTime;
+        if(clockMove < 200) {
+            return;
+        }
+        clockMove -= 200;
+
+        this.deleteDeadEntities();
+        this.updateEntities(deltaTime);
+    }
+
+    private void deleteDeadEntities() {
+        for(HashMap<Point, MBasicEntity> hashMap : this.layers) {
+            ArrayList<Point> positions = new ArrayList<>();
+            for (HashMap.Entry<Point, MBasicEntity> entry : hashMap.entrySet()) {
+                if (!entry.getValue().getIsAlive()) {
+                    positions.add(entry.getKey());
+                }
+            }
+            for(Point position: positions) {
+                hashMap.remove(position);
+            }
+        }
+    }
+
+    private void updateEntities(long deltaTime) {
+        ArrayList<Pair<Pair<Point, Point>, MBasicEntity>> entitiesToMove = new ArrayList<>();
+
+        for(HashMap<Point, MBasicEntity> layer : this.layers) {
+            for (HashMap.Entry<Point, MBasicEntity> entry : layer.entrySet()) {
+                if (entry.getValue() instanceof MDynamicEntity) {
+                    MDynamicEntity entity = (MDynamicEntity) entry.getValue();
+                    entity.onUpdate(deltaTime);
+
+                    DIRECTION key = entity.getCurrentDirection();
+                    if(key != DIRECTION.IDLE) {
+                        Point p = new Point(0, 0);
+                        if(key == DIRECTION.UP) {
+                            p.y -= 1;
+                            entity.getTile().setRotation(0.0);
+                        }
+                        else if(key == DIRECTION.DOWN) {
+                            p.y += 1;
+                            entity.getTile().setRotation(180.0);
+                        }
+                        else if(key == DIRECTION.LEFT) {
+                            p.x -= 1;
+                            entity.getTile().setRotation(270.0);
+                        }
+                        else if(key == DIRECTION.RIGHT) {
+                            p.x += 1;
+                            entity.getTile().setRotation(90.0);
+                        }
+                        Point p1 = entry.getKey();
+                        Point p2 = new Point(entry.getKey().x + p.x,entry.getKey().y + p.y);
+
+                        if(this.canMoveTo(entity, p2)) {
+                            entitiesToMove.add(new Pair<>(new Pair<>(p1, p2), entity));
+                        }
+                    }
+                }
+            }
+
+            for(Pair<Pair<Point, Point>, MBasicEntity> e : entitiesToMove) {
+                layer.put(e.getKey().getValue(), e.getValue());
+                layer.remove(e.getKey().getKey());
+            }
+        }
+    }
+
+    private boolean canMoveTo(MDynamicEntity entityToMove, Point pointTargeted) {
+
+        ArrayList<MBasicEntity> entities = this.getEntitiesByPosition(pointTargeted);
+
+        for(MBasicEntity entity : entities) {
+            if(entity instanceof MPhysicEntity) {
+                MPhysicEntity pOther = (MPhysicEntity) entity;
+
+                return entityToMove.onCollide(pOther);
+            }
+        }
+
+        return true;
+    }
+
+    public void setPlayerDirection(DIRECTION input) {
+        ArrayList<MBasicEntity> entities = this.getEntitiesByType("PACMAN");
+
+        for(MBasicEntity entity : entities) {
+            if(entity instanceof MPacman) {
+                MPacman p = (MPacman) entity;
+                p.setDirection(input);
+            }
+        }
+    }
+
+    public MBasicEntity getEntityByPosition(Point point, int idLayer) {
+        if(idLayer < this.layers.size()) {
+            return this.layers.get(idLayer).get(point);
         }
         return null;
     }
 
-    public ArrayList<BasicEntity> getEntitiesByPosition(Point point) {
-        ArrayList<BasicEntity> e = new ArrayList<>();
+    public ArrayList<MBasicEntity> getEntitiesByType(String type) {
+        ArrayList<MBasicEntity> entities = new ArrayList<>();
 
-        for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
+        for(HashMap<Point, MBasicEntity> hashMap : this.layers) {
+            for (HashMap.Entry<Point, MBasicEntity> entry : hashMap.entrySet()) {
+                if (entry.getValue().getTile().getType().equals(type)) {
+                    entities.add(entry.getValue());
+                }
+            }
+        }
+
+        return entities;
+    }
+
+    public ArrayList<MBasicEntity> getEntitiesByPosition(Point point) {
+        ArrayList<MBasicEntity> e = new ArrayList<>();
+
+        for(HashMap<Point, MBasicEntity> hashMap : this.layers) {
             if(hashMap.containsKey(point)) {
                 e.add(hashMap.get(point));
             }
@@ -55,136 +175,39 @@ public class MMap {
         return e;
     }
 
-    public void pushInput(DIRECTION key) {
-        if(this.stackInput.isEmpty() || (!this.stackInput.peek().equals(key) && this.stackInput.size() < 10)) {
-            this.stackInput.push(key);
-            System.out.println(stackInput);
-        }
-
-        ArrayList<Pair<Pair<Point, Point>, BasicEntity>> entitiesToMove = new ArrayList<>();
-        for(HashMap<Point, BasicEntity> hashMap : this.entityMaps) {
-            for (HashMap.Entry<Point, BasicEntity> entry : hashMap.entrySet()) {
-                if(entry.getValue().getTile().getType().equals("PACMAN")) {
-                    Point p = new Point(0, 0);
-                    if(key == DIRECTION.UP) {
-                        p.y -= 1;
-                    }
-                    else if(key == DIRECTION.DOWN) {
-                        p.y += 1;
-                    }
-                    else if(key == DIRECTION.LEFT) {
-                        p.x -= 1;
-                    }
-                    else if(key == DIRECTION.RIGHT) {
-                        p.x += 1;
-                    }
-                    Point p1 = entry.getKey();
-                    Point p2 = new Point(entry.getKey().x + p.x,entry.getKey().y + p.y);
-                    BasicEntity entity = entry.getValue();
-
-                    entitiesToMove.add(new Pair<>(new Pair<>(p1, p2), entity));
-                }
-            }
-            for(Pair<Pair<Point, Point>, BasicEntity> e : entitiesToMove) {
-                hashMap.put(e.getKey().getValue(), e.getValue());
-                hashMap.remove(e.getKey().getKey());
-            }
-        }
-    }
-
-    public boolean moveEntity(String entityType) {
-//        for (HashMap.Entry<Point, ArrayList<BasicEntity>> entry : mEntities.entrySet()) {
-//            ArrayList<BasicEntity> myListOfEntity = entry.getValue();
-//            for(BasicEntity e : myListOfEntity) {
-//                if(e.getTile().getType().equals(entityType)) {
-//                    System.out.println(entry.getKey());
-//
-//                    Point currentPos = entry.getKey();
-//                    Point nextPos = new Point(currentPos.x, currentPos.y - 1);
-//                    myListOfEntity.remove(e);
-//                    this.addEntity(nextPos, e);
-//
-//                    System.out.println(nextPos);
-//                    return true;
-//                }
-//            }
-//        }
-
-
-        return false;
-    }
-
-
-    private void addEntity(int idLayer, Point pos, BasicEntity entity) {
-        if(idLayer < this.entityMaps.size()) {
-            this.entityMaps.get(idLayer).put(pos, entity);
-        }
-    }
-
     public boolean create(Layers data) {
         //On test si le parser n'a pas d'erreur
         if(data != null) {
             List<Tile[][]> layers = data.getLayers();
             if(layers != null) {
-                this.layers = data;
                 this.size = new Point(data.getWidth(), data.getHeight());
                 this.tilesize = new Point(data.getTilewidth(), data.getTileheight());
-                this.nbLayer = layers.size();
-
-                this.entityMaps.clear();
+                this.layers.clear();
 
                 //On parcourt chaque layer
                 for(int k = 0; k < layers.size(); k++) {
                     Tile[][] layer = layers.get(k);
-                    this.entityMaps.add(new HashMap<Point, BasicEntity>());
+                    this.layers.add(new HashMap<Point, MBasicEntity>());
                     //On parcourt chaque case
                     for (int i = 0; i < layer.length; i++) {
                         for (int j = 0; j < layer[i].length; j++) {
                             //si la case est pleine
                             if (layer[i][j] != null) {
                                 //Si il n'y en a pas, on n'en créer une. Sinon on ajoute une autre entité
-                                this.addEntity(k, new Point(j, i), new BasicEntity(layer[i][j]));
+                                this.addEntity(k, new Point(j, i), MEntityManager.create(layer[i][j]));
                             }
                         }
                     }
                 }
-//                this.display();
                 return true;
             }
         }
-
         return false;
     }
 
-    public void display() {
-        //On test si le parser n'a pas d'erreur
-        if(this.layers != null) {
-            List<Tile[][]> layers = this.layers.getLayers();
-            if(layers != null){
-                System.out.println("<--------------------------------------------------------------->");
-                //On parcourt chaque layer
-                for(Tile[][] layer : layers){
-                    //On parcourt chaque case
-                    for (int i = 0; i < layer.length; i++) {
-                        for (int j = 0; j < layer[i].length; j++) {
-                            if (layer[i][j] != null) {
-                                //la case est pleine
-                                System.out.print(layer[i][j].getGid());//getter -> Source, taille, posTexture, type
-                            } else {
-                                //la case est vide
-                                System.out.print("0");
-                            }
-                            System.out.print(", ");
-                        }
-                        System.out.println("");
-                    }
-                    System.out.println("");
-                }
-
-                System.out.println("Map de taille : " + this.layers.getWidth() + " : " + this.layers.getHeight());
-                System.out.println("Tile de taille : " + this.layers.getTilewidth() + " : " + this.layers.getTileheight());
-                System.out.println("<--------------------------------------------------------------->");
-            }
+    private void addEntity(int idLayer, Point pos, MBasicEntity entity) {
+        if(idLayer < this.layers.size()) {
+            this.layers.get(idLayer).put(pos, entity);
         }
     }
 }

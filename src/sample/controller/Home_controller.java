@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -39,28 +40,26 @@ public class Home_controller {
         Stage stage = (Stage)((Node)(event.getSource())).getScene().getWindow();
 
         GameVC vgame = new GameVC(game, 1500.0, 900.0);
-
-        StackPane test = new StackPane();
-//        Scene gameScene = new Scene(test, 1000, 1000);
         Scene gameScene = new Scene(vgame);
 
-        ArrayList<String> input = new ArrayList<String>();
+        ArrayList<String> input = new ArrayList<>();
 
         gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
-                    case Z:
-                        game.getMap().pushInput(MMap.DIRECTION.UP);
+                    case UP:
+//                        vgame.label.setText(Integer.toString(game.getMap().getScore(0)));
+                        game.getMap().setPlayerDirection(MMap.DIRECTION.UP);
                         break;
-                    case Q:
-                        game.getMap().pushInput(MMap.DIRECTION.LEFT);
+                    case LEFT:
+                        game.getMap().setPlayerDirection(MMap.DIRECTION.LEFT);
                         break;
-                    case S:
-                        game.getMap().pushInput(MMap.DIRECTION.DOWN);
+                    case DOWN:
+                        game.getMap().setPlayerDirection(MMap.DIRECTION.DOWN);
                         break;
-                    case D:
-                        game.getMap().pushInput(MMap.DIRECTION.RIGHT);
+                    case RIGHT:
+                        game.getMap().setPlayerDirection(MMap.DIRECTION.RIGHT);
                         break;
                     default:
                         break;
@@ -69,7 +68,6 @@ public class Home_controller {
                 String code = keyEvent.getCode().toString();
                 if(!input.contains(code)) {
                     input.add(code);
-//                    game.getMap().moveEntity("PACMAN");
                 }
             }
         });
@@ -81,11 +79,10 @@ public class Home_controller {
             }
         });
 
-        stage.setScene(gameScene);
-//        stage.show();
-
         game.addObserver(vgame);
         game.start();
+
+        stage.setScene(gameScene);
     }
 
     public void quit() {
