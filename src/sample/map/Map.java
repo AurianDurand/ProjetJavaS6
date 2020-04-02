@@ -6,7 +6,7 @@ import sample.entityManager.EntityType;
 
 import sample.entityManager.dynamicEntities.Direction;
 import sample.entityManager.dynamicEntities.DynamicEntity;
-import sample.model.entities.BasicEntity;
+import sample.entityManager.dynamicEntities.Pacman;
 import sample.parser.Layers;
 
 import java.awt.*;
@@ -79,12 +79,6 @@ public class Map {
                         // if the tile contains something (an entity)
                         if(layer[i][j] != null) {
 
-//                            System.out.print(layer[i][j].getGid()); // getter -> Source, taille, posTexture, type
-//                            System.out.print(layer[i][j].getSource());
-//                            System.out.print(layer[i][j].getCoordTextureX());
-//                            System.out.print(layer[i][j].getCoordTextureY());
-//                            System.out.print(layer[i][j].getType());
-
                             // create the entity
 
                             if (layer[i][j].getType() != null) {
@@ -93,55 +87,36 @@ public class Map {
                                     case "PACMAN":
 
                                         // i and j are inverted because for the parser, j = lines = x and i = columns = y
-                                        this.createEntity(EntityType.PACMAN, j, i, layer[i][j].getSource(), layerIndex);
+                                        this.createEntity(EntityType.PACMAN, j, i, layer[i][j], layerIndex);
                                         break;
                                     case "GHOST":
-                                        this.createEntity(EntityType.GHOST, j, i, layer[i][j].getSource(), layerIndex);
+                                        this.createEntity(EntityType.GHOST, j, i, layer[i][j], layerIndex);
                                         break;
                                     case "PACGUM":
-                                        this.createEntity(EntityType.PACGUM, j, i, layer[i][j].getSource(), layerIndex);
+                                        this.createEntity(EntityType.PACGUM, j, i, layer[i][j], layerIndex);
                                         break;
                                     case "SUPERPACGUM":
-                                        this.createEntity(EntityType.SUPERPACGUM, j, i, layer[i][j].getSource(), layerIndex);
+                                        this.createEntity(EntityType.SUPERPACGUM, j, i, layer[i][j], layerIndex);
                                         break;
                                     case "WALL":
-                                        this.createEntity(EntityType.WALL, j, i, layer[i][j].getSource(), layerIndex);
+                                        this.createEntity(EntityType.WALL, j, i, layer[i][j], layerIndex);
                                         break;
                                     default:
-                                        this.createEntity(EntityType.OTHER, j, i, layer[i][j].getSource(), layerIndex);
+                                        this.createEntity(EntityType.OTHER, j, i, layer[i][j], layerIndex);
                                         break;
                                 }
-
-//                                if(this.tiles[j][i].getEntities().size() >= 1) {
-//
-////                                    System.out.println(j+","+i+": "+this.tiles[j][i].getEntities().get(this.tiles[j][i].getEntities().size()-1));
-//                                    this.entityMaps.get(layerIndex).put(new Point(j,i), this.tiles[j][i].getEntities().get(this.tiles[j][i].getEntities().size()-1));
-//                                }
                             }
-
                         }
+
                         // if the tile is empty on this layer
                         else {
-//                            System.out.print("0");
                         }
-
-//                        System.out.print(", ");
                     }
-//                    System.out.println("");
                 }
-//                System.out.println("");
+
                 layerIndex ++;
             }
         }
-
-//        System.out.println("Map de taille : " + cLayers.getWidth() + " : " + cLayers.getHeight());
-//        System.out.println("Tile de taille : " + cLayers.getTilewidth() + " : " + cLayers.getTileheight());
-//
-//        System.out.println("number of entities : " + this.entityManager.getEntities().size());
-//        System.out.println("0,0 : "+this.getEntitiesOnTile(0,0));
-//        System.out.println("1,1 : "+this.getEntitiesOnTile(1,1));
-//        System.out.println("8,1 : "+this.getEntitiesOnTile(8,1));
-
     }
 
     public Tile getTile(int x, int y) {
@@ -164,9 +139,9 @@ public class Map {
                 int currentX = this.entitiesPosition.get(entity).getX();
                 int currentY = this.entitiesPosition.get(entity).getY();
 
-                System.out.println("Move:");
-                System.out.println("  " + entity + ": " + this.entitiesPosition.get(entity) +" / " + currentX + "," + currentY);
-                System.out.println("  direction: " + ((DynamicEntity) entity).getBuffer());
+//                System.out.println("Move:");
+//                System.out.println("  " + entity + ": " + this.entitiesPosition.get(entity) +" / " + currentX + "," + currentY);
+//                System.out.println("  direction: " + ((DynamicEntity) entity).getBuffer());
 
                 ArrayList<Entity> entitiesOnTileToMOveOn;
                 boolean canTheEntityMove;
@@ -242,6 +217,14 @@ public class Map {
                 }
             }
         }
+
+        System.out.println("Pacman: "+this.entitiesPosition.get(this.getPacman()).getX()+","+this.entitiesPosition.get(this.getPacman()).getY());
+
+        for (Entity entity : this.entityManager.getEntitiesToDelete()) {
+            System.out.println("To delete: "+entity+" -> "+this.entitiesPosition.get(entity).getX()+","+this.entitiesPosition.get(entity).getY());
+            this.destroyEntity(entity);
+        }
+        this.entityManager.clearEntitiesToDelete();
     }
 
     /**
@@ -251,23 +234,30 @@ public class Map {
      */
     private void setEntityToNewTile(Entity entity, int x, int y) {
 
-        System.out.println("  has moved to " + x + "," + y);
+        if(entity instanceof Pacman) System.out.println("  has moved to " + x + "," + y);
 
         // remove the entity from the current tile
         this.entitiesPosition.get(entity).removeEntity(entity);
 
         // set the new tile for the entity in the HashMap
-        this.entitiesPosition.replace(entity, this.tiles[x][y]);
+//        this.entitiesPosition.replace(entity, this.tiles[x][y]);
+        this.entitiesPosition.put(entity, this.tiles[x][y]);
 
         // add the entity into the new tile
         this.tiles[x][y].addEntity(entity);
 
         // fourth, move the entity in the entityMaps for the view
+        boolean theEntityHasMoved = false;
         for (HashMap<Point,Entity> layer: this.entityMaps) {
-            if(layer.containsKey(new Point(x,y))) {
-                if(layer.get(new Point(x,y)) == entity) {
-                    layer.remove(new Point(x,y));
-                    layer.put(new Point(x,y),entity);
+
+            for(int l = 0; l < this.getSize().y; l++) {
+                for(int m = 0; m < this.getSize().x; m++) {
+
+                    if(layer.get(new Point(m, l)) == entity && !theEntityHasMoved) {
+                        layer.remove(new Point(m, l));
+                        layer.put(new Point(x,y),entity);
+                        theEntityHasMoved = true;
+                    }
                 }
             }
         }
@@ -281,7 +271,7 @@ public class Map {
      * @param assetPath
      * @param layerIndex
      */
-    public void createEntity(EntityType entityType, int x, int y, String assetPath, int layerIndex) {
+    public void createEntity(EntityType entityType, int x, int y, sample.parser.Tile assetPath, int layerIndex) {
 
         // first, ask the entityManager to create the entity
         Entity createdEntity = this.entityManager.createEntity(entityType,assetPath);
@@ -296,6 +286,8 @@ public class Map {
         if(this.tiles[x][y].getEntities().size() >= 1) {
             this.entityMaps.get(layerIndex).put(new Point(x,y), this.tiles[x][y].getEntities().get(this.tiles[x][y].getEntities().size()-1));
         }
+
+        System.out.println(createdEntity+" -> "+this.entitiesPosition.get(createdEntity).getY()+","+this.entitiesPosition.get(createdEntity).getY());
     }
 
     /**
@@ -314,19 +306,67 @@ public class Map {
         this.entityManager.destroyEntity(entity);
 
         // fourth, destroy the entity from the entityMaps (for the view)
-        // ...
+        boolean theEntityHasBeenRemoved = false;
         for (HashMap<Point,Entity> layer: this.entityMaps) {
-            if(layer.containsValue(entity)) {
-                layer.forEach((k,v) -> {
-                    if(v == entity) {
-                        layer.remove(k);
+
+            for(int l = 0; l < this.getSize().y; l++) {
+                for(int m = 0; m < this.getSize().x; m++) {
+
+                    if(layer.get(new Point(m, l)) == entity && !theEntityHasBeenRemoved) {
+                        layer.remove(new Point(m, l));
+                        theEntityHasBeenRemoved = true;
                     }
-                });
+                }
             }
         }
     }
 
+    // -------------------------
+
+    // for the view
+
+    public Entity getEntityByPosition(Point point, int idLayer) {
+        if(idLayer < this.entityMaps.size()) {
+            return this.entityMaps.get(idLayer).get(point);
+        }
+        return null;
+    }
+
+    public ArrayList<Entity> getEntitiesByPosition(Point point) {
+        ArrayList<Entity> e = new ArrayList<>();
+
+        for(HashMap<Point, Entity> hashMap : this.entityMaps) {
+            if(hashMap.containsKey(point)) {
+                e.add(hashMap.get(point));
+            }
+        }
+        return e;
+    }
+
+    // -------------------------
+
+    public Pacman getPacman() {
+        for (Entity e : this.entityManager.getEntities()) {
+            if(e instanceof Pacman) {
+                return (Pacman) e;
+            }
+        }
+        return null;
+    }
+
     public HashMap<Entity, Tile> getEntitiesPosition() {
         return entitiesPosition;
+    }
+
+    public Point getSize() {
+        return size;
+    }
+
+    public Point getTilesize() {
+        return tilesize;
+    }
+
+    public int getNbLayer() {
+        return nbLayer;
     }
 }

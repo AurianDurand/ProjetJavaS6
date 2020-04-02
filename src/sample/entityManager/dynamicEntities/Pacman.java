@@ -1,6 +1,6 @@
 package sample.entityManager.dynamicEntities;
 
-import sample.map.Tile;
+import sample.parser.Tile;
 
 public class Pacman extends DynamicEntity {
 
@@ -9,6 +9,10 @@ public class Pacman extends DynamicEntity {
 
     public Pacman(String assetPath) {
         super(assetPath);
+    }
+
+    public Pacman(Tile tile) {
+        super(tile);
     }
 
     public int getLifes() {

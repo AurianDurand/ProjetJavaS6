@@ -4,12 +4,14 @@ import sample.entityManager.dynamicEntities.Direction;
 import sample.entityManager.dynamicEntities.DynamicEntity;
 import sample.entityManager.dynamicEntities.Ghost;
 import sample.entityManager.dynamicEntities.Pacman;
+import sample.entityManager.objects.Object;
 import sample.entityManager.objects.PacGum;
 import sample.entityManager.objects.SuperPacGum;
 import sample.entityManager.physicalEntities.PhysicalEntity;
 import sample.entityManager.physicalEntities.Wall;
 import sample.map.Map;
-import sample.map.Tile;
+//import sample.map.Tile;
+import sample.parser.Tile;
 
 import java.util.ArrayList;
 
@@ -23,28 +25,34 @@ public class EntityManager {
         this.map = map;
     }
 
-    public Entity createEntity(EntityType entityType, String assetPath) {
+    public Entity createEntity(EntityType entityType, /*String assetPath,*/ Tile tile) {
 
         // first, create the entity
         Entity createdEntity = null;
         switch (entityType) {
             case PACMAN:
-                createdEntity = new Pacman(assetPath);
+//                createdEntity = new Pacman(assetPath);
+                createdEntity = new Pacman(tile);
                 break;
             case GHOST:
-                createdEntity = new Ghost(assetPath);
+//                createdEntity = new Ghost(assetPath);
+                createdEntity = new Ghost(tile);
                 break;
             case PACGUM:
-                createdEntity = new PacGum(assetPath);
+//                createdEntity = new PacGum(assetPath);
+                createdEntity = new PacGum(tile);
                 break;
             case SUPERPACGUM:
-                createdEntity = new SuperPacGum(assetPath);
+//                createdEntity = new SuperPacGum(assetPath);
+                createdEntity = new SuperPacGum(tile);
                 break;
             case WALL:
-                createdEntity = new Wall(assetPath);
+//                createdEntity = new Wall(assetPath);
+                createdEntity = new Wall(tile);
                 break;
             case OTHER:
-                createdEntity = new Entity(assetPath);
+//                createdEntity = new Entity(assetPath);
+                createdEntity = new Entity(tile);
                 break;
         }
 
@@ -94,6 +102,7 @@ public class EntityManager {
                         ((Pacman) entityToMove).loseOneLife();
 
                         System.out.println("  has collided with a ghost -> - 1 life");
+                        System.out.println("  remaining life: "+((Pacman) entityToMove).getLifes());
 
                         if(((Pacman) entityToMove).getLifes() == 0) {
 
@@ -117,6 +126,8 @@ public class EntityManager {
 
                     // increment the points obtained by the player
                     ((Pacman) entityToMove).gainOnePoint();
+
+                    System.out.println("  points: "+((Pacman) entityToMove).getPoints());
                 }
             }
         }
@@ -126,5 +137,9 @@ public class EntityManager {
 
     public ArrayList<Entity> getEntitiesToDelete() {
         return entitiesToDelete;
+    }
+
+    public void clearEntitiesToDelete() {
+        this.entitiesToDelete.clear();
     }
 }

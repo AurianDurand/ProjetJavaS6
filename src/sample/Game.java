@@ -35,45 +35,6 @@ public class Game extends Observable implements Runnable {
 
     public void loadLevel(String levelName) {
         this.levelManager = new LevelManager(this.level_mapPath.get(levelName));
-
-//        System.out.println(this.levelManager.getEntitiesPosition());
-
-//        try
-//        {
-//            Thread.sleep(1000);
-//        }
-//        catch(InterruptedException ex)
-//        {
-//            Thread.currentThread().interrupt();
-//        }
-
-//        show(this.levelManager.getEntitiesPosition());
-
-//        this.levelManager.moveAllDynamicEntities();
-
-//        show(this.levelManager.getEntitiesPosition());
-
-//        try
-//        {
-//            Thread.sleep(1000);
-//        }
-//        catch(InterruptedException ex)
-//        {
-//            Thread.currentThread().interrupt();
-//        }
-//
-//        show(this.levelManager.getEntitiesPosition());
-
-//        Iterator it = entitiesPosition.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//
-//            if(pair.getKey() instanceof DynamicEntity) {
-//                System.out.println(pair.getKey() + " = " + ((Tile) pair.getValue()).getY() + ((Tile) pair.getValue()).getY());
-//            }
-//
-//            it.remove(); // avoids a ConcurrentModificationException
-//        }
     }
 
     private void show(HashMap<Entity, Tile> entitiesPosition) {
@@ -85,7 +46,6 @@ public class Game extends Observable implements Runnable {
             if(pair.getKey() instanceof DynamicEntity) {
                 System.out.println(pair.getKey() + " = " + pair.getValue() + " / " + ((Tile) pair.getValue()).getX() + "," + ((Tile) pair.getValue()).getY());
             }
-
 //            it.remove(); // avoids a ConcurrentModificationException
         }
         System.out.println();
@@ -97,11 +57,13 @@ public class Game extends Observable implements Runnable {
 
             this.levelManager.moveAllDynamicEntities();
 
+            System.out.println("-----> game clock");
+
             setChanged();
-            notifyObservers(); // notification de l'observer
+            notifyObservers(); // observer notification
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(250);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -110,14 +72,18 @@ public class Game extends Observable implements Runnable {
     }
 
     public void start() {
-        System.out.println("Game started");
+        System.out.println("GAME STARTED");
         this.th.start();
         this.isRunning = true;
     }
 
     public void stop() {
-        System.out.println("Game stoped");
+        System.out.println("GAME STOPPED");
         this.th.stop();
         this.isRunning = false;
     }
+    public sample.map.Map getMap() {
+        return this.levelManager.getMap();
+    }
+
 }

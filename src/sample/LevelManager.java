@@ -67,8 +67,7 @@ public class LevelManager {
         return cLayers;
     }
 
-    public void update() {
-
+    public Map getMap() {
+        return map;
     }
-
 }

@@ -4,6 +4,9 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import sample.Game;
+import sample.entityManager.Entity;
+import sample.map.Map;
 import sample.model.MGame;
 import sample.model.MMap;
 import sample.model.entities.BasicEntity;
@@ -17,14 +20,17 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class GameVC extends GridPane implements Observer {
-    private MGame game;
-    private MMap map;
+//    private MGame game;
+//    private MMap map;
+    private Game game;
+    private Map map;
     private ImageManager entitiesImage = new ImageManager();
 
     private StackPane stackPane = new StackPane();
     private ArrayList<HashMap<Point, ImageView>> layers = new ArrayList<>();
 
-    public GameVC(MGame game, Double width, Double height) {
+//    public GameVC(MGame game, Double width, Double height) {
+    public GameVC(Game game, Double width, Double height) {
         this.setPrefSize(width, height);
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: black;");
@@ -41,10 +47,12 @@ public class GameVC extends GridPane implements Observer {
     private void createEntityImage() {
         for(int i = 0; i < this.map.getSize().y; i++) {
             for (int j = 0; j < this.map.getSize().x; j++) {
-                ArrayList<BasicEntity> entities = this.map.getEntitiesByPosition(new Point(j, i));
+//                ArrayList<BasicEntity> entities = this.map.getEntitiesByPosition(new Point(j, i));
+                ArrayList<Entity> entities = this.map.getEntitiesByPosition(new Point(j, i));
 
                 if(entities != null) {
-                    for(BasicEntity entity : entities) {
+//                    for(BasicEntity entity : entities) {
+                    for(Entity entity : entities) {
                         this.entitiesImage.add(entity.getTile().getGid(), "res/maps/" + entity.getTile().getSource(), entity.getTile().getCoordTexture(), entity.getTile().getSize());
                     }
                 }
@@ -80,7 +88,8 @@ public class GameVC extends GridPane implements Observer {
         for(int i = 0; i < this.layers.size(); i++) {
             for (HashMap.Entry<Point, ImageView> entry : this.layers.get(i).entrySet()) {
                 //Permet de récupérer une entitée à un point dans un layer d'indice i
-                BasicEntity e = this.map.getEntityByPosition(entry.getKey(), i);
+//                BasicEntity e = this.map.getEntityByPosition(entry.getKey(), i);
+                Entity e = this.map.getEntityByPosition(entry.getKey(), i);
                 if(e != null) {
                     CWritableImage frontImg = (CWritableImage)entry.getValue().getImage();
                     int backEntityId = e.getTile().getGid();

@@ -16,12 +16,13 @@ import sample.view.GameVC;
 import java.util.ArrayList;
 
 public class Home_controller {
-    private  MGame game;
+//    private  MGame game;
+    private Game game;
 
     public Home_controller() {
-        Game game = new Game();
-        game.loadLevel("Level 1");
-        game.start();
+//        Game game = new Game();
+//        game.loadLevel("Level 1");
+//        game.start();
     }
 
     public void onPlayPressed(ActionEvent event) {
@@ -37,11 +38,14 @@ public class Home_controller {
 //            e.printStackTrace();
 //        }
 
-        game = new MGame();
-        if(!game.initialization()) {
-            System.out.println("Error init game");
-            return;
-        }
+//        game = new MGame();
+//        if(!game.initialization()) {
+//            System.out.println("Error init game");
+//            return;
+//        }
+
+        game = new Game();
+        game.loadLevel("Level 3");
 
         Stage stage = (Stage)((Node)(event.getSource())).getScene().getWindow();
 
@@ -53,40 +57,40 @@ public class Home_controller {
 
         ArrayList<String> input = new ArrayList<String>();
 
-        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                switch (keyEvent.getCode()) {
-                    case Z:
-                        game.getMap().pushInput(MMap.DIRECTION.UP);
-                        break;
-                    case Q:
-                        game.getMap().pushInput(MMap.DIRECTION.LEFT);
-                        break;
-                    case S:
-                        game.getMap().pushInput(MMap.DIRECTION.DOWN);
-                        break;
-                    case D:
-                        game.getMap().pushInput(MMap.DIRECTION.RIGHT);
-                        break;
-                    default:
-                        break;
-                }
-
-                String code = keyEvent.getCode().toString();
-                if(!input.contains(code)) {
-                    input.add(code);
-//                    game.getMap().moveEntity("PACMAN");
-                }
-            }
-        });
-        gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                String code = keyEvent.getCode().toString();
-                input.remove( code );
-            }
-        });
+//        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent keyEvent) {
+//                switch (keyEvent.getCode()) {
+//                    case Z:
+//                        game.getMap().pushInput(MMap.DIRECTION.UP);
+//                        break;
+//                    case Q:
+//                        game.getMap().pushInput(MMap.DIRECTION.LEFT);
+//                        break;
+//                    case S:
+//                        game.getMap().pushInput(MMap.DIRECTION.DOWN);
+//                        break;
+//                    case D:
+//                        game.getMap().pushInput(MMap.DIRECTION.RIGHT);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//                String code = keyEvent.getCode().toString();
+//                if(!input.contains(code)) {
+//                    input.add(code);
+////                    game.getMap().moveEntity("PACMAN");
+//                }
+//            }
+//        });
+//        gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent keyEvent) {
+//                String code = keyEvent.getCode().toString();
+//                input.remove( code );
+//            }
+//        });
 
         stage.setScene(gameScene);
 //        stage.show();

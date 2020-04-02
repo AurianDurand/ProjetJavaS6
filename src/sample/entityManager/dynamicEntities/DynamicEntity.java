@@ -1,7 +1,7 @@
 package sample.entityManager.dynamicEntities;
 
 import sample.entityManager.Entity;
-import sample.map.Tile;
+import sample.parser.Tile;
 
 public class DynamicEntity extends Entity {
 
@@ -9,6 +9,10 @@ public class DynamicEntity extends Entity {
 
     public DynamicEntity(String assetPath) {
         super(assetPath);
+    }
+
+    public DynamicEntity(Tile tile) {
+        super(tile);
     }
 
     public Direction getBuffer() {
