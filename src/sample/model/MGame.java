@@ -10,7 +10,7 @@ public class MGame extends Observable implements Runnable {
     private MLevelManager levelManager;
     private Thread th;
     private boolean isRunning;
-    long deltaTime = 30;//ms
+    long deltaTime = 50;//ms
 
     public MGame() {
         this.levelManager = new MLevelManager();

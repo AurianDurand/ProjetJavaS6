@@ -75,7 +75,7 @@ public class MMap {
     private void updateEntities(long deltaTime) {
         for(HashMap<Point, MBasicEntity> layer : this.layers) {
             List<Point> keyList = new ArrayList<>(layer.keySet());
-            for(int i = 0; i < keyList.size(); i++) {
+            for(int i = 0; i < keyList.size();) {
                 Point key = keyList.get(i);
                 MBasicEntity entity = layer.get(key);
 
@@ -110,8 +110,11 @@ public class MMap {
 
                             layer.remove(currentPosition);
                         }
+                        else i++;
                     }
+                    else i++;
                 }
+                else i++;
             }
         }
     }

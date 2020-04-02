@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -29,12 +31,15 @@ public class GameVC extends GridPane implements Observer {
     public Label label = new Label();
     private ArrayList<HashMap<Point, ImageView>> layers = new ArrayList<>();
 
+    private ImageView test = new ImageView();
+
     public GameVC(MGame game, Double width, Double height) {
         this.setPrefSize(width, height);
         this.setAlignment(Pos.CENTER);
         this.setStyle("-fx-background-color: black;");
         this.add(this.label, 1, 0);
         this.add(this.stackPane, 1, 1);
+//        this.stackPane.getChildren().add(this.test);
 
         this.label.setText("Score : 0");
         this.label.setStyle("-fx-font-size: 40px;-fx-font-weight: bold;-fx-text-fill: WHITE;");
@@ -47,6 +52,8 @@ public class GameVC extends GridPane implements Observer {
         this.createEntityImage();
         this.createGrid();
         this.fillGrid();
+//        this.test.setY(0);
+//        this.test.setImage(new Image("res/textures/test.png"));
     }
 
     private void createEntityImage() {
