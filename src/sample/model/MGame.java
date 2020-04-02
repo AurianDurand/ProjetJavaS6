@@ -25,7 +25,7 @@ public class MGame extends Observable implements Runnable {
     }
 
     public boolean initialization() {
-        return this.levelManager.load(MLevelManager.Level.LEVEL_3);
+        return this.levelManager.load(MLevelManager.Level.LEVEL_1);
     }
 
     public MMap getMap() {

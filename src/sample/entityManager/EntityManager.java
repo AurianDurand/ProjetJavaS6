@@ -23,7 +23,7 @@ public class EntityManager {
         this.map = map;
     }
 
-    public Entity createEntity(EntityType entityType, int x, int y, String assetPath) {
+    public Entity createEntity(EntityType entityType, String assetPath) {
 
         // first, create the entity
         Entity createdEntity = null;
@@ -42,6 +42,9 @@ public class EntityManager {
                 break;
             case WALL:
                 createdEntity = new Wall(assetPath);
+                break;
+            case OTHER:
+                createdEntity = new Entity(assetPath);
                 break;
         }
 

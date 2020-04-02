@@ -2,16 +2,16 @@ package sample.entityManager;
 
 import sample.parser.Tile;
 
-import java.awt.*;
-
 public class Entity {
 
     private static int lastId = 1;
     private int id;
     private Tile tile;
+    private String assetPath;
 
-    public Entity() {
+    public Entity(String assetPath) {
         this.id = lastId++;
+        this.assetPath = assetPath;
     }
 
     public Entity(Tile tile) {
@@ -21,5 +21,7 @@ public class Entity {
 
     public int getId() { return this.id; }
     public Tile getTile() { return this.tile; }
-
+    public String getAssetPath() {
+        return assetPath;
+    }
 }

@@ -24,8 +24,9 @@ public class Game extends Observable implements Runnable {
     public Game() {
 
         // the game levels
-        this.level_mapPath.put("Level 1","map_3.tmx");
-        this.level_mapPath.put("Level 2","Map 2");
+        this.level_mapPath.put("Level 1","map_1.tmx");
+        this.level_mapPath.put("Level 2","map_2.tmx");
+        this.level_mapPath.put("Level 3","map_3.tmx");
 
         this.isRunning = false;
         this.th = new Thread(this);

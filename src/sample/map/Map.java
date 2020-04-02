@@ -107,6 +107,9 @@ public class Map {
                                     case "WALL":
                                         this.createEntity(EntityType.WALL, j, i, layer[i][j].getSource(), layerIndex);
                                         break;
+                                    default:
+                                        this.createEntity(EntityType.OTHER, j, i, layer[i][j].getSource(), layerIndex);
+                                        break;
                                 }
 
 //                                if(this.tiles[j][i].getEntities().size() >= 1) {
@@ -281,7 +284,7 @@ public class Map {
     public void createEntity(EntityType entityType, int x, int y, String assetPath, int layerIndex) {
 
         // first, ask the entityManager to create the entity
-        Entity createdEntity = this.entityManager.createEntity(entityType,x,y,assetPath);
+        Entity createdEntity = this.entityManager.createEntity(entityType,assetPath);
 
         // second, add the entity to the HashMap
         this.entitiesPosition.put(createdEntity, this.tiles[x][y]);

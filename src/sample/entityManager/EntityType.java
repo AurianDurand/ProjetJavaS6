@@ -5,5 +5,6 @@ public enum EntityType {
     GHOST,
     PACGUM,
     SUPERPACGUM,
-    WALL
+    WALL,
+    OTHER
 }
