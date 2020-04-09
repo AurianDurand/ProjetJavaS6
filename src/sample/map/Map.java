@@ -6,6 +6,7 @@ import sample.entityManager.EntityType;
 
 import sample.entityManager.dynamicEntities.Direction;
 import sample.entityManager.dynamicEntities.DynamicEntity;
+import sample.entityManager.dynamicEntities.Ghost;
 import sample.entityManager.dynamicEntities.Pacman;
 import sample.parser.Layers;
 
@@ -212,16 +213,18 @@ public class Map {
                         }
                         break;
                     case IDLE:
-                        ((DynamicEntity) entity).setBuffer(Direction.getRandomDirection());
+                        if ((DynamicEntity) entity instanceof Ghost) {
+                            ((DynamicEntity) entity).setBuffer(Direction.getRandomDirection());
+                        }
                         break;
                 }
             }
         }
 
-        System.out.println("Pacman: "+this.entitiesPosition.get(this.getPacman()).getX()+","+this.entitiesPosition.get(this.getPacman()).getY());
+//        System.out.println("Pacman: "+this.entitiesPosition.get(this.getPacman()).getX()+","+this.entitiesPosition.get(this.getPacman()).getY());
 
         for (Entity entity : this.entityManager.getEntitiesToDelete()) {
-            System.out.println("To delete: "+entity+" -> "+this.entitiesPosition.get(entity).getX()+","+this.entitiesPosition.get(entity).getY());
+//            System.out.println("To delete: "+entity+" -> "+this.entitiesPosition.get(entity).getX()+","+this.entitiesPosition.get(entity).getY());
             this.destroyEntity(entity);
         }
         this.entityManager.clearEntitiesToDelete();
@@ -234,7 +237,7 @@ public class Map {
      */
     private void setEntityToNewTile(Entity entity, int x, int y) {
 
-        if(entity instanceof Pacman) System.out.println("  has moved to " + x + "," + y);
+//        if(entity instanceof Pacman) System.out.println("  has moved to " + x + "," + y);
 
         // remove the entity from the current tile
         this.entitiesPosition.get(entity).removeEntity(entity);
@@ -287,7 +290,7 @@ public class Map {
             this.entityMaps.get(layerIndex).put(new Point(x,y), this.tiles[x][y].getEntities().get(this.tiles[x][y].getEntities().size()-1));
         }
 
-        System.out.println(createdEntity+" -> "+this.entitiesPosition.get(createdEntity).getY()+","+this.entitiesPosition.get(createdEntity).getY());
+//        System.out.println(createdEntity+" -> "+this.entitiesPosition.get(createdEntity).getY()+","+this.entitiesPosition.get(createdEntity).getY());
     }
 
     /**
@@ -345,13 +348,12 @@ public class Map {
 
     // -------------------------
 
+    public void setDirectionFirstPacman(Direction d) {
+        this.getPacman().setBuffer(d);
+    }
+
     public Pacman getPacman() {
-        for (Entity e : this.entityManager.getEntities()) {
-            if(e instanceof Pacman) {
-                return (Pacman) e;
-            }
-        }
-        return null;
+        return this.entityManager.getPacman().get(0);
     }
 
     public HashMap<Entity, Tile> getEntitiesPosition() {

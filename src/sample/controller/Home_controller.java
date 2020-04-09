@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import sample.Game;
+import sample.entityManager.dynamicEntities.Direction;
 import sample.model.MGame;
 import sample.model.MMap;
 import sample.view.GameVC;
@@ -91,6 +92,41 @@ public class Home_controller {
 //                input.remove( code );
 //            }
 //        });
+
+        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                switch (keyEvent.getCode()) {
+                    case UP:
+                        game.getMap().setDirectionFirstPacman(Direction.UP);
+                        break;
+                    case LEFT:
+                        game.getMap().setDirectionFirstPacman(Direction.LEFT);
+                        break;
+                    case DOWN:
+                        game.getMap().setDirectionFirstPacman(Direction.DOWN);
+                        break;
+                    case RIGHT:
+                        game.getMap().setDirectionFirstPacman(Direction.RIGHT);
+                        break;
+                    default:
+                        break;
+                }
+
+                String code = keyEvent.getCode().toString();
+                if(!input.contains(code)) {
+                    input.add(code);
+                }
+            }
+        });
+        gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                String code = keyEvent.getCode().toString();
+                input.remove( code );
+            }
+        });
+
 
         stage.setScene(gameScene);
 //        stage.show();

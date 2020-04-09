@@ -31,27 +31,21 @@ public class EntityManager {
         Entity createdEntity = null;
         switch (entityType) {
             case PACMAN:
-//                createdEntity = new Pacman(assetPath);
                 createdEntity = new Pacman(tile);
                 break;
             case GHOST:
-//                createdEntity = new Ghost(assetPath);
                 createdEntity = new Ghost(tile);
                 break;
             case PACGUM:
-//                createdEntity = new PacGum(assetPath);
                 createdEntity = new PacGum(tile);
                 break;
             case SUPERPACGUM:
-//                createdEntity = new SuperPacGum(assetPath);
                 createdEntity = new SuperPacGum(tile);
                 break;
             case WALL:
-//                createdEntity = new Wall(assetPath);
                 createdEntity = new Wall(tile);
                 break;
             case OTHER:
-//                createdEntity = new Entity(assetPath);
                 createdEntity = new Entity(tile);
                 break;
         }
@@ -84,7 +78,9 @@ public class EntityManager {
             if(entityOnTargetTile instanceof PhysicalEntity) {
 
                 // only for test
-                ((DynamicEntity)entityToMove).setBuffer(Direction.getRandomDirection());
+                if(entityOnTargetTile instanceof Ghost) {
+                    ((DynamicEntity)entityToMove).setBuffer(Direction.getRandomDirection());
+                }
 
                 return false; // return false and stop the method
             }
@@ -101,8 +97,8 @@ public class EntityManager {
                         // Pac-Man lose one life
                         ((Pacman) entityToMove).loseOneLife();
 
-                        System.out.println("  has collided with a ghost -> - 1 life");
-                        System.out.println("  remaining life: "+((Pacman) entityToMove).getLifes());
+//                        System.out.println("  has collided with a ghost -> - 1 life");
+//                        System.out.println("  remaining life: "+((Pacman) entityToMove).getLifes());
 
                         if(((Pacman) entityToMove).getLifes() == 0) {
 
@@ -122,12 +118,12 @@ public class EntityManager {
                     // add the entity to the destroy list to destroy the object instance
                     entitiesToDelete.add(entityOnTargetTile);
 
-                    System.out.println("  object picked up -> + 1p");
+//                    System.out.println("  object picked up -> + 1p");
 
                     // increment the points obtained by the player
                     ((Pacman) entityToMove).gainOnePoint();
 
-                    System.out.println("  points: "+((Pacman) entityToMove).getPoints());
+//                    System.out.println("  points: "+((Pacman) entityToMove).getPoints());
                 }
             }
         }
@@ -141,5 +137,15 @@ public class EntityManager {
 
     public void clearEntitiesToDelete() {
         this.entitiesToDelete.clear();
+    }
+
+    public ArrayList<Pacman> getPacman() {
+        ArrayList<Pacman> toReturn = new ArrayList<>();
+        for (Entity e: this.entities) {
+            if (e instanceof Pacman) {
+                toReturn.add((Pacman) e);
+            }
+        }
+        return toReturn;
     }
 }

@@ -38,14 +38,14 @@ public class Game extends Observable implements Runnable {
     }
 
     private void show(HashMap<Entity, Tile> entitiesPosition) {
-        System.out.println("\nPositions:");
+//        System.out.println("\nPositions:");
         Iterator it = entitiesPosition.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
 
-            if(pair.getKey() instanceof DynamicEntity) {
-                System.out.println(pair.getKey() + " = " + pair.getValue() + " / " + ((Tile) pair.getValue()).getX() + "," + ((Tile) pair.getValue()).getY());
-            }
+//            if(pair.getKey() instanceof DynamicEntity) {
+//                System.out.println(pair.getKey() + " = " + pair.getValue() + " / " + ((Tile) pair.getValue()).getX() + "," + ((Tile) pair.getValue()).getY());
+//            }
 //            it.remove(); // avoids a ConcurrentModificationException
         }
         System.out.println();
@@ -57,7 +57,7 @@ public class Game extends Observable implements Runnable {
 
             this.levelManager.moveAllDynamicEntities();
 
-            System.out.println("-----> game clock");
+//            System.out.println("-----> game clock");
 
             setChanged();
             notifyObservers(); // observer notification
